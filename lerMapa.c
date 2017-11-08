@@ -1,67 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
-#define COL 160
-#define LIN 50
 
-void lerMapa(FILE **mapaMatriz, char *mapaArq){
-	*mapaMatriz = fopen (mapaArq, "r") ;
-	if(!mapaMatriz) {
-		perror("Arquivo nao aberto: "); //saber se dicionario foi aberto
-		exit(1);
-	}
+#define COLMAX 160
+#define LINMAX 50
+
+void desenharBordas(WINDOW *screen) {
+  box( screen, 0, 0 ); // sets default borders for the window
 }
 
-int main(int argc, char const *argv[])
-{
-	WINDOW *window;
-	char **mapa;
-	char *mapaArq = "map.h";
-	FILE *mapaMatriz;
+int main(int argc, char *argv[]) {
+  int gameOver = 0;
+  int xAtual, yAtual, novoX, novoY;
+  int alturaScore = 3;
 
-    initscr(); // initialize Ncurses
+  initscr();
+  noecho();
+  curs_set(FALSE);
 
-    window = newwin( LIN,COL ,2 , 2); // create a new window
-	box( window, 0, 0 ); // sets default borders for the window
+  // set up initial windows
+  getmaxyx(stdscr, yAtual, xAtual);
 
-	lerMapa(&mapaMatriz,mapaArq);
+  WINDOW *janelaPontos = newwin(alturaScore, xAtual, 0, 0);//altura,largura,posX,posY
+  WINDOW *janelaJogo = newwin(yAtual - alturaScore, xAtual, alturaScore, 0);	
 
-	
-	mapa = malloc(LIN * COL+1 * sizeof(char));
-	for (int i = 0; i < LIN; ++i)
-	{
-		mapa[i] = malloc(COL+1 * sizeof(int));
-	}
+  desenharBordas(janelaJogo);
+  desenharBordas(janelaPontos);
 
+  while(!gameOver){
+    getmaxyx(stdscr, novoY, novoX);
 
+    if (novoY != yAtual || novoX != xAtual) {
+      xAtual = novoX;
+      yAtual = novoY;
 
-	char c;
-	for (int i = 0; i < LIN; ++i)
-	{
-		for (int j = 0; j < COL+1; ++j)
-		{
-			c=getc(mapaMatriz);
-			mapa[i][j] = c;
-		}
-	}
+      wresize(janelaPontos, alturaScore, xAtual);
+      wresize(janelaJogo, yAtual - alturaScore, xAtual);
+      mvwin(janelaJogo, yAtual + alturaScore, 0);
 
+      wclear(stdscr);
+      wclear(janelaJogo);
+      wclear(janelaPontos);
 
-	for (int i = 0; i < LIN; ++i)
-	{
-		for (int j = 0; j < COL+1; ++j)
-		{
-			putc(mapa[i][j],stdout);
-		}
-	}
+      desenharBordas(janelaJogo);
+      desenharBordas(janelaPontos);
+    }
 
+    // draw to our windows
+    mvwprintw(janelaPontos, 1, 1, "Hearts:");
+    mvwprintw(janelaPontos, 1, 8, "00");
+    mvwprintw(janelaPontos, 1, 12, "Coins:");
+    mvwprintw(janelaPontos, 1, 18, "00");
+    mvwprintw(janelaPontos, 1, 22, "Keys:");
+    mvwprintw(janelaPontos, 1, 27, "00");
 
+    mvwprintw(janelaJogo, 1, 1, "janelaJogo");
 
+    // refresh each window
+    wrefresh(janelaJogo);
+    wrefresh(janelaPontos);
+  }
 
-    delwin( window);
-    endwin();
+  endwin();
 
-
-
-
-	return 0;
+  return 0;
 }
+
