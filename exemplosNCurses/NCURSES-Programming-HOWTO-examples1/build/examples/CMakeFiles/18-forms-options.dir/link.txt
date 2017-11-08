@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/18-forms-options.dir/options.c.o  -o 18-forms-options -rdynamic -lcurses -lform 

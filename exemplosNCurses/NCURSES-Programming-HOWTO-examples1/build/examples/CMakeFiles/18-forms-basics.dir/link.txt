@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/18-forms-basics.dir/basics.c.o  -o 18-forms-basics -rdynamic -lcurses -lform 

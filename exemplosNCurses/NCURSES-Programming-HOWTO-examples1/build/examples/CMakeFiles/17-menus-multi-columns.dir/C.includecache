@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bcc/rrs17/Matérias/segundoSemestre/Oficina/projetos/IsaacGame/teste/teste/NCURSES-Programming-HOWTO-examples/17-menus/multi-columns.c
+curses.h
+-
+menu.h
+-
+

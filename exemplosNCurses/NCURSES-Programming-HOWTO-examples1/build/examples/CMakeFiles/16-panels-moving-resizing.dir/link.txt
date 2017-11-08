@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/16-panels-moving-resizing.dir/moving-resizing.c.o  -o 16-panels-moving-resizing -rdynamic -lcurses -lpanel 

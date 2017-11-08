@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/17-menus-multi-columns.dir/multi-columns.c.o  -o 17-menus-multi-columns -rdynamic -lcurses -lmenu 

@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bcc/rrs17/Matérias/segundoSemestre/Oficina/projetos/IsaacGame/teste/teste/NCURSES-Programming-HOWTO-examples/18-forms/basics.c
+form.h
+-
+

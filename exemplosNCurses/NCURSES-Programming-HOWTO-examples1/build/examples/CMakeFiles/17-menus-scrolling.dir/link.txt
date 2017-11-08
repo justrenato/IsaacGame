@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/17-menus-scrolling.dir/scrolling.c.o  -o 17-menus-scrolling -rdynamic -lcurses -lmenu 
