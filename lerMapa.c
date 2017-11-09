@@ -39,7 +39,19 @@ char **lerMapa(char **mapa,char *mapaNome){ //matriz q vai guardar o mapa, nome 
 }
 
 void imprimeMapa(char **mapa, WINDOW *janela){
-    mvwprintw(janela, 1, 3, "Coins:");
+    for (int i = 0; i < LINMAX; ++i)
+    {
+	    mvwprintw(janela, i+1, 3, mapa[i]);
+    }
+}
+
+void infoScore(WINDOW *janela){
+	mvwprintw(janela, 1, 1, "Hearts:");
+    mvwprintw(janela, 1, 8, "00");
+    mvwprintw(janela, 1, 12, "Coins:");
+    mvwprintw(janela, 1, 18, "00");
+    mvwprintw(janela, 1, 22, "Keys:");
+    mvwprintw(janela, 1, 27, "00");
 }
 
 int main(int argc, char *argv[]) {
@@ -56,18 +68,23 @@ int main(int argc, char *argv[]) {
 	mapa = lerMapa(mapa,mapa1);
 
 	getmaxyx(stdscr, yAtual, xAtual); //pega o max x e y da janela atual no terminal
-
 	WINDOW *janelaScore = newwin(ALT_SCORE, xAtual, 0, 0); //altura,largura,posX,posY
 	WINDOW *janelaJogo = newwin(yAtual - ALT_SCORE, xAtual, ALT_SCORE, 0);	
 
+	/*duas bordas*/
 	desenharBordas(janelaScore);
 	desenharBordas(janelaJogo);
-	// imprimeMapa(janelaJogo);
+    
+	/*mapa mais score*/
+    infoScore(janelaScore);
+	imprimeMapa(mapa,janelaJogo);
 
   while(!gameOver){
+    
     getmaxyx(stdscr, novoY, novoX);
 
-    if (novoY != yAtual || novoX != xAtual) {
+    /*teste para ver se o terminal foi */
+    if (novoY != yAtual || novoX != xAtual){
       xAtual = novoX;
       yAtual = novoY;
 
@@ -81,26 +98,20 @@ int main(int argc, char *argv[]) {
 
       desenharBordas(janelaJogo);
       desenharBordas(janelaScore);
-	  // imprimeMapa(janelaJogo);
+	  imprimeMapa(mapa,janelaJogo);
     }
 
-    // infos score
-    mvwprintw(janelaScore, 1, 1, "Hearts:");
-    mvwprintw(janelaScore, 1, 8, "00");
-    mvwprintw(janelaScore, 1, 12, "Coins:");
-    mvwprintw(janelaScore, 1, 18, "00");
-    mvwprintw(janelaScore, 1, 22, "Keys:");
-    mvwprintw(janelaScore, 1, 27, "00");
+    // infos score 
+    infoScore(janelaScore);
 
-    mvwprintw(janelaJogo, 1, 1, "janelaJogo");
+    // mapa na tela
+	imprimeMapa(mapa,janelaJogo);
 
-    // refresh each window
+    // atualiza janelas
     wrefresh(janelaScore);
     wrefresh(janelaJogo);
   }
 
   endwin();
-
   return 0;
 }
-
