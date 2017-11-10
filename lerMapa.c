@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <curses.h>
 #include <ncurses.h>
 
 #define COLMAX 158+1
@@ -71,26 +72,50 @@ void imprimeMapa(char **mapa, WINDOW *janela){
 void infoScore(WINDOW *janela){
 	int xAtual, yAtual;
 	getmaxyx(stdscr, yAtual, xAtual); 
-	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | (x: %d y: %d)",05,xAtual,yAtual);
+	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | (x: %d y: %d)",55,xAtual,yAtual);
 }
 
+void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa){
+ 	mvwprintw(janela,y, x, "(;_;)");
+ 	mvwprintw(janela,y+1, x, "__|__");
+ 	mvwprintw(janela,y+2, x, "  |  ");
+ 	mvwprintw(janela,y+3, x, " / \\ ");
+
+ 	// for (int i = 0; i < LINMAX; ++i)
+ 	// {
+ 	// 	for (int j = 0; j < COLMAX; ++j)
+ 	// 	{
+ 	// 		if ((i==y)&&(j==x))
+ 	// 		{
+ 	// 			mapa[i+y]="(;_;)";
+ 	// 			// mapa[i+1][j]='__|__\n';
+ 	// 		}
+ 	// 	}
+ 	// }
+
+}
 int main(int argc, char *argv[]) {
 	/*#################################### INICIALIZAÇÕES AQUI ####################################*/
+	int xIsaac=90,yIsaac=20;
+	int ch;
 	int gameOver = 0; 
 	int xAtual, yAtual, novoX, novoY; //cordenadas
 
 	char *mapa1 = "map.h";
 	char **mapa = NULL;
   
-	initscr();
-	noecho();
-	curs_set(0);
-
 	mapa = lerMapa(mapa,mapa1);
+
+	initscr(); //iniciar ncurses
 
 	getmaxyx(stdscr, yAtual, xAtual); //pega o max x e y da janela atual no terminal
 	WINDOW *janelaScore = newwin(ALT_SCORE, xAtual, 0, 0); //altura,largura,posX,posY
 	WINDOW *janelaJogo = newwin(yAtual - ALT_SCORE, xAtual, ALT_SCORE, 0);	
+
+	noecho();
+    keypad( janelaJogo, TRUE ); // enable keyboard input for the window.
+	curs_set(0);
+	cbreak();
 
 
 	/*#################################### IMPRESSÕES AQUI ####################################*/
@@ -102,6 +127,7 @@ int main(int argc, char *argv[]) {
 	/*mapa mais score*/
     infoScore(janelaScore);
 	imprimeMapa(mapa,janelaJogo);
+	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
 
   while(!gameOver){
     
@@ -123,6 +149,7 @@ int main(int argc, char *argv[]) {
       desenharBordas(janelaJogo);
       desenharBordas(janelaScore);
 	  imprimeMapa(mapa,janelaJogo);
+      imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
     }
 
     // infos score 
@@ -130,10 +157,28 @@ int main(int argc, char *argv[]) {
 
     // mapa na tela
 	imprimeMapa(mapa,janelaJogo);
+	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
 
     // atualiza janelas
     wrefresh(janelaScore);
     wrefresh(janelaJogo);
+
+
+    ch = wgetch(janelaJogo);
+    switch( ch ) {
+        case KEY_RIGHT:
+        	xIsaac++;
+            break;
+        case KEY_LEFT:
+        	xIsaac--;
+            break;
+        case KEY_DOWN:
+        	yIsaac++;
+            break;
+        case KEY_UP:
+        	yIsaac--;
+            break;
+    }    
   }
 
   endwin();
