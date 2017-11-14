@@ -27,18 +27,18 @@ int main(int argc, char* argv[]) {
 
   initscr();
   raw();
-  start_color();
+  // start_color();
   cbreak();
 
   keypad(stdscr, true);
   noecho();
-  init_pair(1, COLOR_CYAN, COLOR_BLACK);
+  // init_pair(1, COLOR_CYAN, COLOR_BLACK);
 
   init_win_params(&win);
   print_win_params(&win);
 
-  attron(COLOR_PAIR(1));
-  printw("Press Ctrl-C or Q to exit");
+  // attron(COLOR_PAIR(1));
+  // printw("Press Ctrl-C or Q to exit");
   refresh();
   attroff(COLOR_PAIR(1));
 
