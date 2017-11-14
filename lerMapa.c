@@ -43,57 +43,121 @@ char **lerMapa(char **mapa,char *mapaNome){ //matriz q vai guardar o mapa, nome 
 	return(mapa);
 }
 
+int yMapa(){
+	int yAtual,y;
+	yAtual = getmaxy(stdscr); //pega o max x e y da janela atual no terminal
+	if (yAtual < LINMAX +2){
+		y=1;
+	}
+	else{
+		y=(((yAtual-2)- LINMAX)/2);
+	}
+	return y;
+}
+
+int xMapa(){
+	int xAtual,x;
+	xAtual = getmaxx(stdscr); //pega o max x e y da janela atual no terminal
+	if(xAtual<COLMAX+1){
+		x=1;
+	}
+	else {
+		x = (xAtual-(COLMAX-1))/2;
+	}
+	return x;
+}
+
+
 void imprimeMapa(char **mapa, WINDOW *janela){
-	int xAtual, yAtual;
-	getmaxyx(stdscr, yAtual, xAtual); //pega o max x e y da janela atual no terminal
     for (int i = 0; i < LINMAX; ++i)
     {
-    	if (xAtual < COLMAX+1){
-		   if (yAtual < LINMAX +2){
-				mvwprintw(janela, i+1, 1, "%s",mapa[i]);
-		   }
-		   else{
-				mvwprintw(janela, (((yAtual-2)- LINMAX)/2)+i, 1, "%s",mapa[i]);
-		   }
-    	}
-    	else{
-    		if (xAtual < COLMAX+1)
-    		{
-			    mvwprintw(janela, i+1, (xAtual-(COLMAX-1))/2, "%s", mapa[i]);
-    		}
-    		else{
-			    mvwprintw(janela,(((yAtual-2)- LINMAX)/2)+i, (xAtual-(COLMAX-1))/2, "%s", mapa[i]);
-
-    		}
-    	}
+		mvwprintw(janela, yMapa()+i, xMapa(), "%s",mapa[i]);
     }
 }
 
-void infoScore(WINDOW *janela){
-	int xAtual, yAtual;
+void infoScore(WINDOW *janela, int yIsaac, int xIsaac){
+	int xAtual, yAtual,x,y;
 	getmaxyx(stdscr, yAtual, xAtual); 
-	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | (x: %d y: %d)",55,xAtual,yAtual);
+	getyx(janela, y, x);
+	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | xmouse: %d ymouse: %d",55,x,y);
 }
 
 void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa){
- 	mvwprintw(janela,y, x, "(;_;)");
- 	mvwprintw(janela,y+1, x, "__|__");
- 	mvwprintw(janela,y+2, x, "  |  ");
- 	mvwprintw(janela,y+3, x, " / \\ ");
+ 	// mvwprintw(janela,y, x,   "(;_;)");
+ 	// mvwprintw(janela,y+1, x, "__|__");
+ 	// mvwprintw(janela,y+2, x, "  |  ");
+ 	// mvwprintw(janela,y+3, x, " / \\ ");
 
- 	// for (int i = 0; i < LINMAX; ++i)
- 	// {
- 	// 	for (int j = 0; j < COLMAX; ++j)
- 	// 	{
- 	// 		if ((i==y)&&(j==x))
- 	// 		{
- 	// 			mapa[i+y]="(;_;)";
- 	// 			// mapa[i+1][j]='__|__\n';
- 	// 		}
- 	// 	}
- 	// }
+	/*cabeça*/
+	mapa[y][x]='(';
+	mapa[y][x+1]=';';
+	mapa[y][x+2]='_';
+	mapa[y][x+3]=';';
+	mapa[y][x+4]=')';
 
+	/*braços*/
+	mapa[y+1][x]='_';
+	mapa[y+1][x+1]='_';
+	mapa[y+1][x+2]='|';
+	mapa[y+1][x+3]='_';
+	mapa[y+1][x+4]='_';
+
+	/*tronco*/
+	mapa[y+2][x+2]='|';
+
+	/*pernas*/
+	mapa[y+3][x+1]='/';
+	mapa[y+3][x+2]=' ';
+	mapa[y+3][x+3]='\\';
 }
+
+void apagarIsaac(int x, int y, WINDOW *janela,char** mapa){
+
+	/*cabeça*/
+	mapa[y][x]=' ';
+	mapa[y][x+1]=' ';
+	mapa[y][x+2]=' ';
+	mapa[y][x+3]=' ';
+	mapa[y][x+4]=' ';
+
+	/*braços*/
+	mapa[y+1][x]=' ';
+	mapa[y+1][x+1]=' ';
+	mapa[y+1][x+2]=' ';
+	mapa[y+1][x+3]=' ';
+	mapa[y+1][x+4]=' ';
+
+	/*tronco*/
+	mapa[y+2][x+2]=' ';
+
+	/*pernas*/
+	mapa[y+3][x+1]=' ';
+	mapa[y+3][x+2]=' ';
+	mapa[y+3][x+3]=' ';
+}
+
+char ColisaoIsaac(int xIsaac,int yIsaac){
+	char colisao;
+	if (!(yIsaac+yMapa()<LINMAX+yMapa()-5))
+	{
+		colisao='b';
+	}
+
+	if (!(yIsaac+yMapa() >yMapa()+1) )
+	{
+		colisao='c';
+	}
+
+	if(!(xIsaac+xMapa()>xMapa()+2)){
+		colisao='e';
+	}
+	if(!(xIsaac+xMapa() <COLMAX+xMapa()-7)){
+		colisao='d';
+	}
+
+	return colisao;
+}
+
 int main(int argc, char *argv[]) {
 	/*#################################### INICIALIZAÇÕES AQUI ####################################*/
 	int xIsaac=90,yIsaac=20;
@@ -125,7 +189,7 @@ int main(int argc, char *argv[]) {
 	desenharBordas(janelaJogo);
     
 	/*mapa mais score*/
-    infoScore(janelaScore);
+    infoScore(janelaScore, yIsaac, xIsaac);
 	imprimeMapa(mapa,janelaJogo);
 	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
 
@@ -153,7 +217,7 @@ int main(int argc, char *argv[]) {
     }
 
     // infos score 
-    infoScore(janelaScore);
+    infoScore(janelaScore, yIsaac, xIsaac);
 
     // mapa na tela
 	imprimeMapa(mapa,janelaJogo);
@@ -163,22 +227,47 @@ int main(int argc, char *argv[]) {
     wrefresh(janelaScore);
     wrefresh(janelaJogo);
 
-
+    apagarIsaac(xIsaac,yIsaac,janelaJogo,mapa);
     ch = wgetch(janelaJogo);
     switch( ch ) {
-        case KEY_RIGHT:
-        	xIsaac++;
-            break;
-        case KEY_LEFT:
-        	xIsaac--;
-            break;
-        case KEY_DOWN:
-        	yIsaac++;
-            break;
-        case KEY_UP:
-        	yIsaac--;
-            break;
+
+	    case 'd':
+	    	if (ColisaoIsaac(xIsaac,yIsaac)!='d'){
+	    		xIsaac++;
+	    	}
+	        break;
+
+	    case 'a':
+	    	if (ColisaoIsaac(xIsaac,yIsaac)!='e'){
+	    		xIsaac--;
+	    	}
+	        break;
+
+	    case 's':
+	    	if (ColisaoIsaac(xIsaac,yIsaac)!='b')
+	    	{
+	    		yIsaac++;
+	    	}
+	        break;
+
+	    case 'w':
+	    	if (ColisaoIsaac(xIsaac,yIsaac)!='c')
+	    	{
+	    		yIsaac--;
+	    	}
+	        break;
     }    
+
+        // infos score 
+    infoScore(janelaScore, yIsaac, xIsaac);
+
+    // mapa na tela
+	imprimeMapa(mapa,janelaJogo);
+	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
+
+    // atualiza janelas
+    wrefresh(janelaScore);
+    wrefresh(janelaJogo);
   }
 
   endwin();
