@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <curses.h>
 #include <ncurses.h>
+#include <time.h>//preciso função para gerar aleatorios
+#include <unistd.h>
 
 #define COLMAX 158+1
 #define LINMAX 45
@@ -151,10 +153,32 @@ char ColisaoIsaac(int xIsaac,int yIsaac){
 	return colisao;
 }
 
-void mira(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa){
+	int click=0;
 	getmouse(event);
-	mvwprintw(janelaScore, 1, 1, "                                                               ");
-	mvwprintw(janelaScore, 1, 1, "ymouse: %d xmouse: %d | yIsaac: %d xIsaac: %d",event->y,event->x,yIsaac,xIsaac);
+	int i=0,j=0;
+	if ((event->y != 0 ) && (event->x != 0)) //como o programa seta em 0 as cordenadas sempre que le outra tecla, quando posição for diferente de 0x0 eu salvo ela.
+	{
+		*oldMouseX = event->x;
+		*oldMouseY = event->y;
+		click = event->bstate; //se click==2 botao esquerdo pressionado.
+	}
+	mvwprintw(janelaScore, 1, 1, "                                                                                                            ");
+	mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d, click:%ld",*oldMouseY,*oldMouseX,yIsaac,xIsaac,click);
+	i = (rand()% 40)+1;
+	j = (rand()% 140)+1;
+
+	/*NAO VAI FUNCIONAR PQ O PROGRAMA IMPRIME A MATRIZ DE UMA VEZ SO E O TIRO EU COLOCO AOS POUCOS NA MATRIZ*/
+	if (click==2)
+	{
+		mapa[i][j]='*';
+		while(j>1){
+			mapa[i][j]=' ';
+			j--;
+			mapa[i][j]='*';
+			usleep(3000);
+		} 
+	}
 }
 
 
@@ -165,9 +189,10 @@ int main(int argc, char *argv[]) {
 	int ch;
 	int gameOver = 0; 
 	int xAtual, yAtual, novoX, novoY; //cordenadas
-
+	int oldMouseX=1, oldMouseY=1;
 	char *mapa1 = "map.h";
 	char **mapa = NULL;
+	srand(time(NULL)); //gerar semente para aleatorio
   
 	mapa = lerMapa(mapa,mapa1);
 
@@ -190,6 +215,7 @@ int main(int argc, char *argv[]) {
 
  	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
   	printf("\033[?1003h\n"); // Makes the terminal report mouse movement events
+  	mouseinterval(0.1);
 
 
 	/*#################################### IMPRESSÕES AQUI ####################################*/
@@ -211,7 +237,7 @@ int main(int argc, char *argv[]) {
 	// getmouse(&event);
 	// mvwprintw(janelaScore, 1, 1, "                                             ");
 	// mvwprintw(janelaScore, 1, 1, "ymouse: %d xmouse: %d | yIsaac: %d xIsaac: %d",event.y,event.x,yIsaac,xIsaac);
-    mira(janelaJogo, janelaScore, &event,xIsaac,yIsaac);
+    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa);
 
 
     /*teste para ver se o terminal foi */
