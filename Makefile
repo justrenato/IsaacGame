@@ -1,10 +1,24 @@
+CFLAGS = -Wall -g
+LFLAGS = -lncurses
+
+objects = lerMapa.o isaaclib.o
+
 all: lerMapa
 
-lerMapa: lerMapa.c 
-	gcc lerMapa.c -Wall -lncurses -g
+
+lerMapa: $(objects)
+	gcc -o isaacGame $(objects) $(LFLAGS)
+
+
+lerMapa.o: lerMapa.c defs.h
+	gcc -c lerMapa.c $(CFLAGS)
+
+isaaclib.o: isaaclib.c defs.h
+	gcc -c isaaclib.c $(CFLAGS) 
+
 
 clean:
-	-rm *.o
+	-rm $(objects)
 
 purge: clean
-	-rm a.out
+	-rm isaacGame
