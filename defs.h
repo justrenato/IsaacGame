@@ -39,4 +39,6 @@ void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac,c
 
 void movimentacao(WINDOW *janelaJogo, WINDOW *janelaScore, int *xIsaac,int *yIsaac, char** mapa);
 
+void geraInimigo(WINDOW *janelaJogo, char** mapa);
+
 #endif
