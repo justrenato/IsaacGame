@@ -215,29 +215,172 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	int click=0;
 	getmouse(event);
 	int i=0;
-    int j=0;
+    int j=0,y=0;
+    int c=0,b=0,e=0,d=0;
 	if ((event->y != 0 ) && (event->x != 0)) //como o programa seta em 0 as cordenadas sempre que le outra tecla, quando posição for diferente de 0x0 eu salvo ela.
 	{
-		*oldMouseX = event->x;
-		*oldMouseY = event->y;
+		*oldMouseX = event->x - xMapa();
+		*oldMouseY = event->y- yMapa()-3;
 		click = event->bstate; //se click==2 botao esquerdo pressionado.
 	}
 	mvwprintw(janelaScore, 1, 1, "                                                                                                            ");
-	mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d, click:%ld",*oldMouseY,*oldMouseX,yIsaac,xIsaac,click);
+	mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- cima:%d baixo:%d, esq:%d, dir:%d",*oldMouseY,*oldMouseX,yIsaac,xIsaac,c,b,e,d);
 
-	i = (rand()% 40)+1;
-	j = (rand()% 140)+1;
+if ((*oldMouseY <= yIsaac - 10) &&  (*oldMouseX <= xIsaac -20))
+{
+	c=1;
+	b=0;
+	e=1;
+	d=0;
+}
 
-	/*NAO VAI FUNCIONAR PQ O PROGRAMA IMPRIME A MATRIZ DE UMA VEZ SO E O TIRO EU COLOCO AOS POUCOS NA MATRIZ*/
+if((*oldMouseY <= yIsaac - 10) && (*oldMouseX >= xIsaac + 20)){
+	c=1;
+	b=0;
+	e=0;
+	d=1;
+}
+
+
+if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX <= xIsaac - 20))
+{
+	c=0;
+	b=1;
+	e=1;
+	d=0;
+}
+
+if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX >= xIsaac + 20))
+{
+	c=0;
+	b=1;
+	e=0;
+	d=1;
+}
+
+if ((*oldMouseY >= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
+{
+	c=0;
+	b=1;
+	e=0;
+	d=0;
+}
+
+if ((*oldMouseY <= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
+{
+	c=1;
+	b=0;
+	e=0;
+	d=0;
+}
+
+if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX <= xIsaac))
+{
+	c=0;
+	b=0;
+	e=1;
+	d=0;
+}
+
+if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX >= xIsaac))
+{
+	c=0;
+	b=0;
+	e=0;
+	d=1;
+}
+
+	j=xIsaac;
+	y=yIsaac;
+	
 	if (click==2)
 	{
-		while (j>1)
-		{
-			mapa[i][j]=' ';
-			(j)--;
-			mapa[i][j]='*';
-			attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			usleep(DELAY);
+		beep();
+		while ((j>2)&&(j<(COLMAX-8))&& ((y>yMapa()-2)&& y<LINMAX-1))
+		{	
+
+			if (e && !d && !c && !b) //esquerda
+			{
+				mapa[y][j-1]=' ';
+				(j)--;
+				mapa[y][j-1]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+
+			if (!e && d && !c && !b) // direita
+			{
+				mapa[y][j+5]=' ';
+				(j)++;
+				mapa[y][j+5]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+
+			if (!e && !d && c && !b) //cima
+			{
+				mapa[y-1][j]=' ';
+				y--;
+				mapa[y-1][j]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+
+			if (!e && !d && !c && b) //baixo
+			{
+				mapa[y-1][j]=' ';
+				y++;
+				mapa[y-1][j]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+
+			if (e && !d && c && !b) //esq+cima
+			{
+				mapa[y-1][j-1]=' ';
+				y--;
+				j--;
+				mapa[y-1][j-1]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+
+			if (!e && d && c && !b) //dir+cima
+			{
+				mapa[y-1][j-1]=' ';
+				y--;
+				j++;
+				mapa[y-1][j-1]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}	
+
+			if (e && !d && !c && b) //esq+baixo
+			{
+				mapa[y][j-1]=' ';
+				y++;
+				j--;
+				mapa[y][j-1]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}			
+			
+			if (!e && d && !c && b) //dir+baixo
+			{
+				mapa[y][j+5]=' ';
+				y++;
+				j++;
+				mapa[y][j+5]='*';
+				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+				usleep(DELAY);
+			}
+	
 		}
+		
+		mapa[y][j-1]=' ';//apagar os tiros ao fim do percurso
+		mapa[y][j+5]=' ';
+		mapa[y-1][j]=' ';
+		mapa[y-1][j-1]=' ';
+		flash();
 	}
 }

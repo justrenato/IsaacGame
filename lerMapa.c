@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
  	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
   	printf("\033[?1003h\n"); // Makes the terminal report mouse movement events
-  	mouseinterval(1);
+  	mouseinterval(0.01);
 
 	
 	/*#################################### IMPRESSÕES PRÉ JOGO ####################################*/
