@@ -85,11 +85,22 @@ int xMapa(){
 }
 
 void imprimeMapa(char **mapa, WINDOW *janela){
+	start_color();
+	init_pair(1, COLOR_BLUE, COLOR_BLACK);
     for (int i = 0; i < LINMAX; ++i)
     {
-		mvwprintw(janela, yMapa()+i, xMapa(), "%s",mapa[i]);
+    	for (int j = 0; j < COLMAX; ++j)
+    	{
+    		if (mapa[i][j]==TIRO)
+    		{
+				wattron(janela,COLOR_PAIR(1));
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				wattroff(janela,COLOR_PAIR(1));
+    		}else mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+    	}
     }
 }
+
 
 void infoScore(WINDOW *janela, int yIsaac, int xIsaac){
 	int xAtual, yAtual;
@@ -155,68 +166,48 @@ void apagarIsaac(int x, int y, WINDOW *janela,char** mapa){
 	mapa[y+3][x+3]=' ';
 }
 
-char ColisaoIsaac(int xIsaac,int yIsaac){
-	char colisao;
-	if (!(yIsaac+yMapa()<LINMAX+yMapa()-5))
-	{
-		colisao='b';
-	}
-
-	if (!(yIsaac+yMapa() >yMapa()+1) )
-	{
-		colisao='c';
-	}
-
-	if(!(xIsaac+xMapa()>xMapa()+2)){
-		colisao='e';
-	}
-	if(!(xIsaac+xMapa() <COLMAX+xMapa()-7)){
-		colisao='d';
-	}
-
-	return colisao;
-}
-
 void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaac, char** mapa){
 	int ch;
     ch = wgetch(janelaJogo);
 
     switch( ch ) {
 	    case 'd':
-	    	if (ColisaoIsaac(*xIsaac,*yIsaac)!='d'){
-    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
-	    		(*xIsaac)++;
-	    	}
+	    		if (mapa[*yIsaac][*xIsaac+5]==' ')
+	    		{
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+	    			(*xIsaac)++;
+	    		}
         break;
 	    case 'a':
-	    	if (ColisaoIsaac(*xIsaac,*yIsaac)!='e'){
-    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
-	    		(*xIsaac)--;
-	    	}
+	    		if (mapa[*yIsaac][*xIsaac-1]==' ')
+	    		{
+	    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+		    		(*xIsaac)--;
+	    		}
         break;
 	    case 's':
-	    	if (ColisaoIsaac(*xIsaac,*yIsaac)!='b')
-	    	{
-    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
-	    		(*yIsaac)++;
-	    	}
+	    		if (mapa[*yIsaac+4][*xIsaac]==' ')
+	    		{
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+		    		(*yIsaac)++;
+	    		}
         break;
 	    case 'w':
-	    	if (ColisaoIsaac(*xIsaac,*yIsaac)!='c')
-	    	{
-    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
-	    		(*yIsaac)--;
-	    	}
+	    		if (mapa[*yIsaac-1][*xIsaac]==' ')
+	    		{
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+	    			(*yIsaac)--;
+	    		}
         break;
    	}
 }
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[]){
 	int click=0;
 	getmouse(event);
-	int i=0;
-    int j=0,y=0;
-    int c=0,b=0,e=0,d=0;
+    int d=0;
+    static int numtiros=0;
+
 	if ((event->y != 0 ) && (event->x != 0)) //como o programa seta em 0 as cordenadas sempre que le outra tecla, quando posição for diferente de 0x0 eu salvo ela.
 	{
 		*oldMouseX = event->x - xMapa();
@@ -224,177 +215,147 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 		click = event->bstate; //se click==2 botao esquerdo pressionado.
 	}
 	mvwprintw(janelaScore, 1, 1, "                                                                                                            ");
-	mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- cima:%d baixo:%d, esq:%d, dir:%d",*oldMouseY,*oldMouseX,yIsaac,xIsaac,c,b,e,d);
+	// mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- numtiros.y: %d ",*oldMouseY,*oldMouseX,yIsaac,xIsaac,tiros[numtiros].y);
 
-	if ((*oldMouseY <= yIsaac - 10) &&  (*oldMouseX <= xIsaac -20))
+	if ((*oldMouseY <= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
 	{
-		c=1;
-		b=0;
-		e=1;
 		d=0;
 	}
 
-	if((*oldMouseY <= yIsaac - 10) && (*oldMouseX >= xIsaac + 20)){
-		c=1;
-		b=0;
-		e=0;
+	if ((*oldMouseY >= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
+	{
 		d=1;
+	}
+
+	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX <= xIsaac))
+	{
+		d=2;
+	}
+	
+	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX >= xIsaac))
+	{
+		d=3;
+	}
+
+	if((*oldMouseY <= yIsaac - 10) && (*oldMouseX >= xIsaac + 20)){
+		d=4;
+	}
+
+	if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX >= xIsaac + 20))
+	{
+		d=5;
+	}
+
+	if ((*oldMouseY <= yIsaac - 10) &&  (*oldMouseX <= xIsaac -20))
+	{
+		d=6;
 	}
 
 
 	if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX <= xIsaac - 20))
 	{
-		c=0;
-		b=1;
-		e=1;
-		d=0;
+		d=7;
 	}
 
-	if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX >= xIsaac + 20))
-	{
-		c=0;
-		b=1;
-		e=0;
-		d=1;
-	}
-
-	if ((*oldMouseY >= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
-	{
-		c=0;
-		b=1;
-		e=0;
-		d=0;
-	}
-
-	if ((*oldMouseY <= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
-	{
-		c=1;
-		b=0;
-		e=0;
-		d=0;
-	}
-
-	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX <= xIsaac))
-	{
-		c=0;
-		b=0;
-		e=1;
-		d=0;
-	}
-
-	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX >= xIsaac))
-	{
-		c=0;
-		b=0;
-		e=0;
-		d=1;
-	}
-
-	j=xIsaac;
-	y=yIsaac;
 	
-	if (click==2)
+	if (click==2 && numtiros < 10)
 	{
+		geraInimigo(janelaJogo, mapa);
 		beep();
-	    geraInimigo(janelaJogo,mapa);
-		while ((j>2)&&(j<(COLMAX-8))&& ((y>yMapa()-2)&& y<LINMAX-1))
-		{	
-
-			if (e && !d && !c && !b) //esquerda
-			{
-				mapa[y-1][j-1]=' ';
-				(j)--;
-				mapa[y-1][j-1]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-
-			if (!e && d && !c && !b) // direita
-			{
-				mapa[y-1][j+5]=' ';
-				(j)++;
-				mapa[y-1][j+5]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-
-			if (!e && !d && c && !b) //cima
-			{
-				mapa[y-1][j]=' ';
-				y--;
-				mapa[y-1][j]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-
-			if (!e && !d && !c && b) //baixo
-			{
-				mapa[y-1][j]=' ';
-				y++;
-				mapa[y-1][j]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-
-			if (e && !d && c && !b) //esq+cima
-			{
-				mapa[y-1][j-1]=' ';
-				y--;
-				j--;
-				mapa[y-1][j-1]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-
-			if (!e && d && c && !b) //dir+cima
-			{
-				mapa[y-1][j-1]=' ';
-				y--;
-				j++;
-				mapa[y-1][j-1]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}	
-
-			if (e && !d && !c && b) //esq+baixo
-			{
-				mapa[y-1][j-1]=' ';
-				y++;
-				j--;
-				mapa[y-1][j-1]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}			
-			
-			if (!e && d && !c && b) //dir+baixo
-			{
-				mapa[y-1][j+5]=' ';
-				y++;
-				j++;
-				mapa[y-1][j+5]='*';
-				attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-				usleep(DELAY);
-			}
-	
-		}
-		
-		mapa[y-1][j-1]=' ';//apagar os tiros ao fim do percurso
-		mapa[y-1][j+5]=' ';
-		mapa[y-1][j]=' ';
-		mapa[y-1][j-1]=' ';
 		flash();
+
+		tiros[numtiros].y = yIsaac;
+		tiros[numtiros].x = xIsaac-1;
+		tiros[numtiros].d = d;
+		numtiros++;
+	
 	}
+		mvwprintw(janelaScore, 1, 1, " numtiros.y: %d yIsaac:%d",tiros[0].y,yIsaac);
+
+/*ATUALIZAR TIROS EXISTENTES */
+
+	for (int i = 0; i < MAXTIROS; ++i)
+	{
+		if (tiros[i].estado) // se estado != 0 tiro existe e precisa ser atualizado
+		{
+			switch(tiros[i].d){
+				case 0:
+					mapa[tiros[i].y][tiros[i].x]=' ';
+					(tiros[i].y) --;
+					mapa[tiros[i].y][tiros[i].x]=TIRO;
+					attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+					usleep(DELAY);
+				break;
+			// 	case 1:
+			// 		mapa[y+1][j+1]=' ';
+			// 		y++;
+			// 		mapa[y+1][j+1]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			// 	case 2:
+			// 		mapa[y][j-1]=' ';
+			// 		(j)--;
+			// 		mapa[y][j-1]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);			
+			// 	break;
+			// 	case 3:
+			// 		mapa[y][j+5]=' ';
+			// 		(j)++;
+			// 		mapa[y][j+5]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			// 	case 4:
+			// 		mapa[y][j+5]=' ';
+			// 		y--;
+			// 		j++;
+			// 		mapa[y][j+5]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			// 	case 5:
+			// 		mapa[y][j+5]=' ';
+			// 		y++;
+			// 		j++;
+			// 		mapa[y][j+5]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			// 	case 6:
+			// 		mapa[y][j-1]=' ';
+			// 		y--;
+			// 		j--;
+			// 		mapa[y][j-1]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			// 	case 7:
+			// 		mapa[y][j-1]=' ';
+			// 		y++;
+			// 		j--;
+			// 		mapa[y][j-1]=TIRO;
+			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+			// 		usleep(DELAY);
+			// 	break;
+			}
+		}
+	}
+
+
+ 
 }
 
 void geraInimigo(WINDOW *janelaJogo, char** mapa){
 	int i=0,j=0,inimigo=0;
-	i = (rand()% 45)+2;
-	j = (rand()% 140)+2;
+	i = (rand()% (LINMAX -4 -yMapa()))+1;
+	j = (rand()% (COLMAX - xMapa()))+1;
 	inimigo = rand()% 3;
 	
 	switch (inimigo) 
 	{
-		case 0://morcego
+		case 0://morceguineo
 			mapa[i][j+1]='/';
 			mapa[i][j+2]='\\';
 			mapa[i][j+3]='/';
@@ -409,7 +370,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa){
 			mapa[i][j+12]='/';
 			mapa[i][j+13]='\\';
 		break;
-		case 1://gatino
+		case 1://gatineo
 			mapa[i][j+1]='/';
 			mapa[i][j+2]='\\';
 			mapa[i][j+3]='_';
@@ -430,7 +391,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa){
 			mapa[i+2][j+4]=' ';
 			mapa[i+2][j+5]='<';				
 		break;
-		case 2://abelinha
+		case 2://abelinea
 			mapa[i][j]=' ';
 			mapa[i][j+1]=' ';
 			mapa[i][j+2]=' ';
@@ -465,6 +426,5 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa){
 
 		break;
 	}
-
-
 }
+

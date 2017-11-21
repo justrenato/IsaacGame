@@ -12,6 +12,27 @@
 #define LINMAX 45
 #define ALT_SCORE 3
 #define DELAY 6000
+#define TIRO '0'
+#define MAXTIROS 10
+
+typedef struct tiro_t {
+	int x,y,d,estado;
+	
+	/*estado 0 - n atirado
+	  estado 1 - atirado
+	  estado 2 - acertou
+	  estado 3 - limite*/
+
+/*	direção 0 - cima
+	direção 1 - baixo
+	direção 2 - esquerda
+	direção 3 - direita
+	direção 4 - dir + cima
+	direção 5 - dir + baixo
+	direção 6 - esq + cima
+	direção 7 - esq + baixo
+	*/
+} tiro_t;
 
 void desenharBordas(WINDOW *janela) ;
 
@@ -31,9 +52,7 @@ void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *jan
 
 void apagarIsaac(int x, int y, WINDOW *janela,char** mapa);
 
-char ColisaoIsaac(int xIsaac,int yIsaac);
-
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa);
+// void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t *tiros);
 
 void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac,char** mapa);
 

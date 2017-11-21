@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
 	char **mapa = NULL; //matriz que sera o mapa
 	srand(time(NULL)); //gerar semente para aleatorio
   
+  	tiro_t tiros[MAXTIROS];
 
 	/*#################################### INICIALIZAÇÕES PARA NCURSES ####################################*/
 	initscr(); //iniciar ncurses
@@ -17,7 +18,6 @@ int main(int argc, char *argv[]) {
 	WINDOW *janelaScore = newwin(ALT_SCORE, xAtual, 0, 0); //altura,largura,posX,posY
 	WINDOW *janelaJogo = newwin(yAtual - ALT_SCORE, xAtual, ALT_SCORE, 0);	
 
-    start_color();
 	noecho();
     keypad(janelaJogo, TRUE ); // enable keyboard input for the window.
 	nodelay (janelaJogo, TRUE) ; 
@@ -38,8 +38,7 @@ int main(int argc, char *argv[]) {
 	desenharBordas(janelaScore);
 	desenharBordas(janelaJogo);
 	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-
-
+	
 	/*####################################  INICIO JOGO ####################################*/
 	while(!gameOver){
     
@@ -48,7 +47,8 @@ int main(int argc, char *argv[]) {
 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
-	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa);
+	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,&tiros);
+
 
 	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
 	}
