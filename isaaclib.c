@@ -4,7 +4,7 @@ void desenharBordas(WINDOW *janela) {
   box( janela, 0, 0 ); // desenha as bordas da janela indicada
 }
 
-void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *janelaJogo, int xIsaac, int yIsaac, char **mapa){
+void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *janelaJogo, int xIsaac, int yIsaac, char **mapa, char **cores){
 	int novoX, novoY;
     getmaxyx(stdscr, novoY, novoX);
     /*teste para ver se o terminal foi redimensionado */
@@ -23,9 +23,18 @@ void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *jan
 		desenharBordas(janelaJogo);
 		desenharBordas(janelaScore);
 		infoScore(janelaScore, yIsaac, xIsaac);
-		imprimeMapa(mapa,janelaJogo);
-		imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
+		imprimeMapa(mapa, cores, janelaJogo);
+		imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa, cores);
 	}
+}
+
+char **inicCores(char **cores){
+	cores = malloc (LINMAX * sizeof(int*)); // aloca espaço de memoria para a matriz do mapa
+	for (int i = 0; i < LINMAX; ++i)
+	{
+		cores[i] = malloc (COLMAX * sizeof(int));
+	}	
+	return cores;
 }
 
 char **lerMapa(char **mapa,char *mapaNome){ //matriz q vai guardar o mapa, nome do arquivo a ser lido
@@ -84,19 +93,43 @@ int xMapa(){
 	return x;
 }
 
-void imprimeMapa(char **mapa, WINDOW *janela){
+void imprimeMapa(char **mapa, char **cores, WINDOW *janela){
 	start_color();
-	init_pair(1, COLOR_BLUE, COLOR_BLACK);
     for (int i = 0; i < LINMAX; ++i)
     {
     	for (int j = 0; j < COLMAX; ++j)
     	{
-    		if (mapa[i][j]==TIRO)
+    		if (cores[i][j]=='i')
     		{
+				init_pair(1, COLOR_GREEN, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(1));
 				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
 				wattroff(janela,COLOR_PAIR(1));
-    		}else mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+    		} else if (cores[i][j]=='a'){
+				init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+				wattron(janela,COLOR_PAIR(2));
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				wattroff(janela,COLOR_PAIR(2));
+    		}
+    		else if(cores[i][j]=='g'){
+				init_pair(3, COLOR_CYAN, COLOR_BLACK);
+				wattron(janela,COLOR_PAIR(3));
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				wattroff(janela,COLOR_PAIR(3));
+    		}
+    		else if(cores[i][j]=='m'){
+				init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
+				wattron(janela,COLOR_PAIR(4));
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				wattroff(janela,COLOR_PAIR(4));
+    		}
+    		else if(cores[i][j]=='t'){
+				init_pair(5, COLOR_BLUE, COLOR_BLACK);
+				wattron(janela,COLOR_PAIR(5));
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				wattroff(janela,COLOR_PAIR(5));
+    		}
+    		else mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
     	}
     }
 }
@@ -108,7 +141,7 @@ void infoScore(WINDOW *janela, int yIsaac, int xIsaac){
 	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | xmouse: %d ymouse: %d",55,xAtual,yAtual);
 }
 
-void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa){
+void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa, char **cores){
 	/*cabeça*/
 	mapa[y][x]='(';
 	mapa[y][x+1]=';';
@@ -130,13 +163,35 @@ void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa){
 	mapa[y+3][x+1]='/';
 	mapa[y+3][x+2]=' ';
 	mapa[y+3][x+3]='\\';
+
+	/*cabeça*/
+	cores[y][x]='i';
+	cores[y][x+1]='i';
+	cores[y][x+2]='i';
+	cores[y][x+3]='i';
+	cores[y][x+4]='i';
+
+	/*braços*/
+	cores[y+1][x]='i';
+	cores[y+1][x+1]='i';
+	cores[y+1][x+2]='i';
+	cores[y+1][x+3]='i';
+	cores[y+1][x+4]='i';
+
+	/*tronco*/
+	cores[y+2][x+2]='i';
+
+	/*pernas*/
+	cores[y+3][x+1]='i';
+	cores[y+3][x+2]='i';
+	cores[y+3][x+3]='i';
 }
 
-void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac, char** mapa){
+void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac, char** mapa, char **cores){
     // atualiza janelas
     // infoScore(janelaScore, yIsaac, xIsaac);
-	imprimeMapa(mapa,janelaJogo);
-	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa);
+	imprimeMapa(mapa, cores, janelaJogo);
+	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa, cores);
     wrefresh(janelaScore);
     wrefresh(janelaJogo);
 }
@@ -202,7 +257,7 @@ void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaa
    	}
 }
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[]){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores, inimigo_t inimigos[]){
 	int click=0;
 	getmouse(event);
     int d;
@@ -215,8 +270,9 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 		click = event->bstate; //se click==2 botao esquerdo pressionado.
 	}
 	mvwprintw(janelaScore, 1, 1, "                                                                                                            ");
-	// mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- numtiros.y: %d ",*oldMouseY,*oldMouseX,yIsaac,xIsaac,tiros[numtiros].y);
+	mvwprintw(janelaScore, 1, 1, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- numtiros.y: %d ",*oldMouseY,*oldMouseX,yIsaac,xIsaac,tiros[numtiros].y);
 
+	/*##############TESTANDO A POSIÇÂO DO MOUSE PARA DETERMINAR DIREÇÃO CASO SEJA ATIRADO*##############*/
 	if ((*oldMouseY <= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
 	{
 		d=0;
@@ -256,24 +312,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	{
 		d=7;
 	}
-
+/*################################################################################################*/
 	
-	if (click==2 && numtiros < 10)
+	if (click==2 && numtiros < 10) //se clickar e nao houverem 10 tiros ja
 	{
-		geraInimigo(janelaJogo, mapa);
+		geraInimigo(janelaJogo, mapa,cores,inimigos);
 		beep();
 		flash();
 
-		tiros[numtiros].y = yIsaac;
-		tiros[numtiros].x = xIsaac-1;
-		tiros[numtiros].d = d;
-		tiros[numtiros].estado = 1;
-		numtiros++;
+		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+		switch(d){
+			case 0:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac+2;
+			break;
+			case 1:
+				tiros[numtiros].y = yIsaac+2;
+				tiros[numtiros].x = xIsaac+2;
+			break;
+			case 2:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac;
+			break;
+			case 3:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac+4;
+			break;
+			case 4:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac+4;
+			break;
+			case 5:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac+4;
+			break;
+			case 6:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac;
+			break;
+			case 7:
+				tiros[numtiros].y = yIsaac;
+				tiros[numtiros].x = xIsaac;
+			break;
+		}
+
+		tiros[numtiros].d = d; //atribui direção atual do mouse à direção do tiro
+		numtiros++; // aumenta o contador de tiros
 	
 	}
-		mvwprintw(janelaScore, 1, 1, " numtiros.y: %d yIsaac:%d",tiros[0].y,yIsaac);
 
-/*ATUALIZAR TIROS EXISTENTES */
+
+	/*ATUALIZAR TIROS EXISTENTES */
 
 	for (int i = 0; i < MAXTIROS; ++i)
 	{
@@ -283,10 +372,11 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 				case 1: //tiro 'andando'
 					switch(tiros[i].d){
 						case 0: //cima
-							if (mapa[tiros[i].y-1][tiros[i].x]==' ')
+							if (mapa[tiros[i].y-1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 							{
 								mapa[tiros[i].y][tiros[i].x]=' ';
 								(tiros[i].y) --;
+								cores[tiros[i].y][tiros[i].x]='t';
 								mapa[tiros[i].y][tiros[i].x]=TIRO;
 							} 
 							else { 
@@ -294,43 +384,89 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 							}
 						break;
 						case 1: //baixo
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].y)++;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y+1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y)++;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}
+							else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 2: //esq
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].x)--;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].x)--;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}
+							else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 3: //dir
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].x)++;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].x)++;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}
+							else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 4: //dir + cima
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].y)--;
-							(tiros[i].x)++;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y-1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y)--;
+								(tiros[i].x)++;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 5: //dir + baixo
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].y)++;
-							(tiros[i].x)++;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y+1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y)++;
+								(tiros[i].x)++;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 6: //esq + cima
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].y)--;
-							(tiros[i].x)--;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y-1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y)--;
+								(tiros[i].x)--;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}else{
+								tiros[i].estado = 2;
+							}
 						break;
 						case 7: //esq + baixo
-							mapa[tiros[i].y][tiros[i].x]=' ';
-							(tiros[i].y)++;
-							(tiros[i].x)--;
-							mapa[tiros[i].y][tiros[i].x]=TIRO;
+							if (mapa[tiros[i].y+1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y)++;
+								(tiros[i].x)--;
+								cores[tiros[i].y][tiros[i].x]='t';
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							}else{
+								tiros[i].estado = 2;
+							}
 						break;
 					}
 				break;
@@ -338,6 +474,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 				case 2:
 					mapa[tiros[i].y][tiros[i].x]=' ';
 					tiros[i].estado = 0;
+					numtiros--;
 				break;
 
 				case 3:
@@ -348,84 +485,154 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	}
 }
 
-void geraInimigo(WINDOW *janelaJogo, char** mapa){
+void inic
+void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, inimigo_t inimigos[]){
 	int i=0,j=0,inimigo=0;
 	i = (rand()% (LINMAX -4 -yMapa()))+1;
 	j = (rand()% (COLMAX - xMapa()))+1;
 	inimigo = rand()% 3;
 	
-	switch (inimigo) 
-	{
-		case 0://morceguineo
-			mapa[i][j+1]='/';
-			mapa[i][j+2]='\\';
-			mapa[i][j+3]='/';
-			mapa[i][j+4]='\\';
-			mapa[i][j+5]='(';
-			mapa[i][j+6]='o';
-			mapa[i][j+7]='_';
-			mapa[i][j+8]='o';
-			mapa[i][j+9]=')';
-			mapa[i][j+10]='/';
-			mapa[i][j+11]='\\';
-			mapa[i][j+12]='/';
-			mapa[i][j+13]='\\';
-		break;
-		case 1://gatineo
-			mapa[i][j+1]='/';
-			mapa[i][j+2]='\\';
-			mapa[i][j+3]='_';
-			mapa[i][j+4]='/';
-			mapa[i][j+5]='\\';	
+	// switch (inimigo) 
+	// {
+	// 	case 0://morceguineo
+	// 		mapa[i][j+1]='/';
+	// 		mapa[i][j+2]='\\';
+	// 		mapa[i][j+3]='/';
+	// 		mapa[i][j+4]='\\';
+	// 		mapa[i][j+5]='(';
+	// 		mapa[i][j+6]='o';
+	// 		mapa[i][j+7]='_';
+	// 		mapa[i][j+8]='o';
+	// 		mapa[i][j+9]=')';
+	// 		mapa[i][j+10]='/';
+	// 		mapa[i][j+11]='\\';
+	// 		mapa[i][j+12]='/';
+	// 		mapa[i][j+13]='\\';
 
-			mapa[i+1][j]='(';
-			mapa[i+1][j+1]=' ';
-			mapa[i+1][j+2]='o';
-			mapa[i+1][j+3]='.';
-			mapa[i+1][j+4]='o';				
-			mapa[i+1][j+5]=' ';				
-			mapa[i+1][j+6]=')';
+	// 		/*COR*/
+	// 		cores[i][j+1]='m';
+	// 		cores[i][j+2]='m';
+	// 		cores[i][j+3]='m';
+	// 		cores[i][j+4]='m';
+	// 		cores[i][j+5]='m';
+	// 		cores[i][j+6]='m';
+	// 		cores[i][j+7]='m';
+	// 		cores[i][j+8]='m';
+	// 		cores[i][j+9]='m';
+	// 		cores[i][j+10]='m';
+	// 		cores[i][j+11]='m';
+	// 		cores[i][j+12]='m';
+	// 		cores[i][j+13]='m';
+	// 	break;
+	// 	case 1://gatineo
+	// 		mapa[i][j+1]='/';
+	// 		mapa[i][j+2]='\\';
+	// 		mapa[i][j+3]='_';
+	// 		mapa[i][j+4]='/';
+	// 		mapa[i][j+5]='\\';	
 
-			mapa[i+2][j+1]='>';
-			mapa[i+2][j+2]=' ';
-			mapa[i+2][j+3]='^';
-			mapa[i+2][j+4]=' ';
-			mapa[i+2][j+5]='<';				
-		break;
-		case 2://abelinea
-			mapa[i][j]=' ';
-			mapa[i][j+1]=' ';
-			mapa[i][j+2]=' ';
-			mapa[i][j+3]='_';
-			mapa[i][j+4]='_';				
-			mapa[i][j+5]=' ';				
-			mapa[i][j+6]=' ';
+	// 		mapa[i+1][j]='(';
+	// 		mapa[i+1][j+1]=' ';
+	// 		mapa[i+1][j+2]='o';
+	// 		mapa[i+1][j+3]='.';
+	// 		mapa[i+1][j+4]='o';				
+	// 		mapa[i+1][j+5]=' ';				
+	// 		mapa[i+1][j+6]=')';
 
-			mapa[i+1][j]=' ';
-			mapa[i+1][j+1]='_';
-			mapa[i+1][j+2]='/';
-			mapa[i+1][j+3]='_';
-			mapa[i+1][j+4]='_';				
-			mapa[i+1][j+5]=')';				
-			mapa[i+1][j+6]=' ';
+	// 		mapa[i+2][j+1]='>';
+	// 		mapa[i+2][j+2]=' ';
+	// 		mapa[i+2][j+3]='^';
+	// 		mapa[i+2][j+4]=' ';
+	// 		mapa[i+2][j+5]='<';	
 
-			mapa[i+2][j]='(';
-			mapa[i+2][j+1]='8';
-			mapa[i+2][j+2]='|';
-			mapa[i+2][j+3]=')';
-			mapa[i+2][j+4]='_';				
-			mapa[i+2][j+5]='}';				
-			mapa[i+2][j+6]='}';
+	// 		/*COR*/
+	// 		cores[i][j+1]='b';
+	// 		cores[i][j+2]='b';
+	// 		cores[i][j+3]='b';
+	// 		cores[i][j+4]='b';
+	// 		cores[i][j+5]='b';	
 
-			mapa[i+3][j]=' ';
-			mapa[i+3][j+1]='`';
-			mapa[i+3][j+2]='\\';
-			mapa[i+3][j+3]='_';
-			mapa[i+3][j+4]='_';				
-			mapa[i+3][j+5]=')';				
-			mapa[i+3][j+6]=' ';
+	// 		cores[i+1][j]='b';
+	// 		cores[i+1][j+1]='b';
+	// 		cores[i+1][j+2]='b';
+	// 		cores[i+1][j+3]='b';
+	// 		cores[i+1][j+4]='b';				
+	// 		cores[i+1][j+5]='b';				
+	// 		cores[i+1][j+6]='b';
 
-		break;
-	}
+	// 		cores[i+2][j+1]='b';
+	// 		cores[i+2][j+2]='b';
+	// 		cores[i+2][j+3]='b';
+	// 		cores[i+2][j+4]='b';
+	// 		cores[i+2][j+5]='b';				
+	// 	break;
+	// 	case 2://abelinea
+	// 		mapa[i][j]=' ';
+	// 		mapa[i][j+1]=' ';
+	// 		mapa[i][j+2]=' ';
+	// 		mapa[i][j+3]='_';
+	// 		mapa[i][j+4]='_';				
+	// 		mapa[i][j+5]=' ';				
+	// 		mapa[i][j+6]=' ';
+
+	// 		mapa[i+1][j]=' ';
+	// 		mapa[i+1][j+1]='_';
+	// 		mapa[i+1][j+2]='/';
+	// 		mapa[i+1][j+3]='_';
+	// 		mapa[i+1][j+4]='_';				
+	// 		mapa[i+1][j+5]=')';				
+	// 		mapa[i+1][j+6]=' ';
+
+	// 		mapa[i+2][j]='(';
+	// 		mapa[i+2][j+1]='8';
+	// 		mapa[i+2][j+2]='|';
+	// 		mapa[i+2][j+3]=')';
+	// 		mapa[i+2][j+4]='_';				
+	// 		mapa[i+2][j+5]='}';				
+	// 		mapa[i+2][j+6]='}';
+
+	// 		mapa[i+3][j]=' ';
+	// 		mapa[i+3][j+1]='`';
+	// 		mapa[i+3][j+2]='\\';
+	// 		mapa[i+3][j+3]='_';
+	// 		mapa[i+3][j+4]='_';				
+	// 		mapa[i+3][j+5]=')';				
+	// 		mapa[i+3][j+6]=' ';
+
+	// 		/*COR*/
+	// 		cores[i][j]='a';
+	// 		cores[i][j+1]='a';
+	// 		cores[i][j+2]='a';
+	// 		cores[i][j+3]='a';
+	// 		cores[i][j+4]='a';				
+	// 		cores[i][j+5]='a';				
+	// 		cores[i][j+6]='a';
+
+	// 		cores[i+1][j]='a';
+	// 		cores[i+1][j+1]='a';
+	// 		cores[i+1][j+2]='a';
+	// 		cores[i+1][j+3]='a';
+	// 		cores[i+1][j+4]='a';				
+	// 		cores[i+1][j+5]='a';				
+	// 		cores[i+1][j+6]='a';
+
+	// 		cores[i+2][j]='a';
+	// 		cores[i+2][j+1]='a';
+	// 		cores[i+2][j+2]='a';
+	// 		cores[i+2][j+3]='a';
+	// 		cores[i+2][j+4]='a';				
+	// 		cores[i+2][j+5]='a';				
+	// 		cores[i+2][j+6]='a';
+
+	// 		cores[i+3][j]='a';
+	// 		cores[i+3][j+1]='a';
+	// 		cores[i+3][j+2]='a';
+	// 		cores[i+3][j+3]='a';
+	// 		cores[i+3][j+4]='a';				
+	// 		cores[i+3][j+5]='a';				
+	// 		cores[i+3][j+6]='a';
+
+	// 	break;
+	// }
 }
 

@@ -8,9 +8,11 @@ int main(int argc, char *argv[]) {
 	int oldMouseX=1, oldMouseY=1;
 	char *mapaArq1 = "map.h";
 	char **mapa = NULL; //matriz que sera o mapa
+	char **cores = NULL; //matriz de cores
 	srand(time(NULL)); //gerar semente para aleatorio
-  
+  	long int clock=0;
   	tiro_t tiros[MAXTIROS];
+  	inimigo_t inimigos[MAXINIMIGOS];
 
 	/*#################################### INICIALIZAÇÕES PARA NCURSES ####################################*/
 	initscr(); //iniciar ncurses
@@ -29,30 +31,31 @@ int main(int argc, char *argv[]) {
 
  	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
   	printf("\033[?1003h\n"); // Makes the terminal report mouse movement events
-  	mouseinterval(0.01);
+  	mouseinterval(0.1);
 
 	
 	/*#################################### IMPRESSÕES PRÉ JOGO ####################################*/
 	mapa = lerMapa(mapa,mapaArq1);
+	cores = inicCores(cores);
 
 	desenharBordas(janelaScore);
 	desenharBordas(janelaJogo);
-	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 	
 	/*####################################  INICIO JOGO ####################################*/
 	while(!gameOver){
     
-		teste_redimensao(&xAtual, &yAtual, janelaScore, janelaJogo, xIsaac, yIsaac, mapa);
+		teste_redimensao(&xAtual, &yAtual, janelaScore, janelaJogo, xIsaac, yIsaac, mapa, cores);
 		
-		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
-	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros);
-	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores,inimigos);
+	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 
 	   	usleep(DELAY);
-
+	   	clock++;
 	}
 
 	endwin();
