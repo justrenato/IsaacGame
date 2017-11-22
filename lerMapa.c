@@ -47,10 +47,12 @@ int main(int argc, char *argv[]) {
 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
-	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,&tiros);
-
-
+	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros);
 	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
+
+
+	   	usleep(DELAY);
+
 	}
 
 	endwin();

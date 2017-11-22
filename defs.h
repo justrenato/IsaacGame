@@ -19,7 +19,7 @@ typedef struct tiro_t {
 	int x,y,d,estado;
 	
 	/*estado 0 - n atirado
-	  estado 1 - atirado
+	  estado 1 - andando
 	  estado 2 - acertou
 	  estado 3 - limite*/
 
@@ -52,7 +52,7 @@ void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *jan
 
 void apagarIsaac(int x, int y, WINDOW *janela,char** mapa);
 
-// void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t *tiros);
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[]);
 
 void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac,char** mapa);
 

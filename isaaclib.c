@@ -205,7 +205,7 @@ void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaa
 void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[]){
 	int click=0;
 	getmouse(event);
-    int d=0;
+    int d;
     static int numtiros=0;
 
 	if ((event->y != 0 ) && (event->x != 0)) //como o programa seta em 0 as cordenadas sempre que le outra tecla, quando posição for diferente de 0x0 eu salvo ela.
@@ -267,6 +267,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 		tiros[numtiros].y = yIsaac;
 		tiros[numtiros].x = xIsaac-1;
 		tiros[numtiros].d = d;
+		tiros[numtiros].estado = 1;
 		numtiros++;
 	
 	}
@@ -278,73 +279,73 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	{
 		if (tiros[i].estado) // se estado != 0 tiro existe e precisa ser atualizado
 		{
-			switch(tiros[i].d){
-				case 0:
-					mapa[tiros[i].y][tiros[i].x]=' ';
-					(tiros[i].y) --;
-					mapa[tiros[i].y][tiros[i].x]=TIRO;
-					attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-					usleep(DELAY);
+			switch (tiros[i].estado){
+				case 1: //tiro 'andando'
+					switch(tiros[i].d){
+						case 0: //cima
+							if (mapa[tiros[i].y-1][tiros[i].x]==' ')
+							{
+								mapa[tiros[i].y][tiros[i].x]=' ';
+								(tiros[i].y) --;
+								mapa[tiros[i].y][tiros[i].x]=TIRO;
+							} 
+							else { 
+								tiros[i].estado = 2;
+							}
+						break;
+						case 1: //baixo
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].y)++;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 2: //esq
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].x)--;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 3: //dir
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].x)++;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 4: //dir + cima
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].y)--;
+							(tiros[i].x)++;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 5: //dir + baixo
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].y)++;
+							(tiros[i].x)++;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 6: //esq + cima
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].y)--;
+							(tiros[i].x)--;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+						case 7: //esq + baixo
+							mapa[tiros[i].y][tiros[i].x]=' ';
+							(tiros[i].y)++;
+							(tiros[i].x)--;
+							mapa[tiros[i].y][tiros[i].x]=TIRO;
+						break;
+					}
 				break;
-			// 	case 1:
-			// 		mapa[y+1][j+1]=' ';
-			// 		y++;
-			// 		mapa[y+1][j+1]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
-			// 	case 2:
-			// 		mapa[y][j-1]=' ';
-			// 		(j)--;
-			// 		mapa[y][j-1]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);			
-			// 	break;
-			// 	case 3:
-			// 		mapa[y][j+5]=' ';
-			// 		(j)++;
-			// 		mapa[y][j+5]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
-			// 	case 4:
-			// 		mapa[y][j+5]=' ';
-			// 		y--;
-			// 		j++;
-			// 		mapa[y][j+5]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
-			// 	case 5:
-			// 		mapa[y][j+5]=' ';
-			// 		y++;
-			// 		j++;
-			// 		mapa[y][j+5]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
-			// 	case 6:
-			// 		mapa[y][j-1]=' ';
-			// 		y--;
-			// 		j--;
-			// 		mapa[y][j-1]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
-			// 	case 7:
-			// 		mapa[y][j-1]=' ';
-			// 		y++;
-			// 		j--;
-			// 		mapa[y][j-1]=TIRO;
-			// 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa);
-			// 		usleep(DELAY);
-			// 	break;
+
+				case 2:
+					mapa[tiros[i].y][tiros[i].x]=' ';
+					tiros[i].estado = 0;
+				break;
+
+				case 3:
+					mapa[tiros[i].y][tiros[i].x]=' ';
+				break;
 			}
 		}
 	}
-
-
- 
 }
 
 void geraInimigo(WINDOW *janelaJogo, char** mapa){
