@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 	character persona; 
 	
     WINDOW *window, *window1;
-    char list[5][7] = { "ISAAC", "JUDAS" };
+    char list[5][7] = { "ISAAC" };
     char item[7];
     int ch, i = 0;
  
@@ -51,18 +51,6 @@ int main(int argc, char **argv){
  	mvwprintw(window,12, 12, "3.5");
  	mvwprintw(window,13, 12, "1.0");
  	mvwprintw(window,14, 12, "0");
-
- 	mvwprintw(window,4, 19, "  _  ");
- 	mvwprintw(window,5, 19, " |_| ");
- 	mvwprintw(window,6, 19, "(;_;)");
- 	mvwprintw(window,7, 19, "__|__");
- 	mvwprintw(window,8, 19, "  |  ");
- 	mvwprintw(window,9, 19, " / \\ ");
-
- 	mvwprintw(window,11,  20, "2");
- 	mvwprintw(window,12, 20, "4.9");
- 	mvwprintw(window,13, 20, "1.2");
- 	mvwprintw(window,14, 20, "0");
     wrefresh( window ); // update the terminal screen
  
     i = 0;
@@ -110,16 +98,7 @@ int main(int argc, char **argv){
     // 	persona.speed = 12;
     // 	persona.luck = 0;
     // }
-    window1 = newwin( LOGIN_BOX_HEIGHT,LOGIN_BOX_WIDHT ,OFFSET_X , OFFSET_Y); // create a new window
-    box( window1, 0, 0 ); // sets default borders for the window
 
-    mvprintw(window1,4, 19, "  _  ");
- 	mvprintw(window1,5, 19, " |_| ");
- 	mvprintw(window1,6, 19, "(;_;)");
- 	mvprintw(window1,7, 19, "__|__");
- 	mvprintw(window1,8, 19, "  |  ");
- 	mvprintw(window1,9, 19, " / \\ ");
- 	delwin( window1);
  	sleep(1);
     endwin();
     return 0;

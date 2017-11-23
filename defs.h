@@ -14,7 +14,14 @@
 #define DELAY 1000
 #define TIRO '0'
 #define MAXTIROS 10
-#define MAXINIMIGOS 3
+#define MAXINIMIGOS 3 //maximo 3 inimigos de cada
+#define TOTALINIMIGOS MAXINIMIGOS*2 //maximo de inimigos que estarão em jogo ao mesmo tempo 
+
+
+#define LOGIN_BOX_WIDHT 35	
+#define LOGIN_BOX_HEIGHT 16
+#define OFFSET_X 5
+#define OFFSET_Y  26
 
 typedef struct tiro_t {
 	int x,y,d,estado;
@@ -24,7 +31,7 @@ typedef struct tiro_t {
 	  estado 2 - acertou
 	  estado 3 - limite*/
 
-/*	direção 0 - cima
+	/*direção 0 - cima
 	direção 1 - baixo
 	direção 2 - esquerda
 	direção 3 - direita
@@ -38,7 +45,8 @@ typedef struct tiro_t {
 
 typedef struct morcego_t
 {
-	int x,y;
+	int xOld,yOld;
+	int xNew,yNew;
 	int estado;
 	int vidas;
 	char cor;
@@ -50,7 +58,8 @@ typedef struct morcego_t
 
 typedef struct gato_t
 {
-	int x,y;
+	int xOld,yOld;
+	int xNew,yNew;
 	int estado;
 	int vidas;
 	char cor;
@@ -62,7 +71,8 @@ typedef struct gato_t
 
 typedef struct abelha_t
 {
-	int x,y;
+	int xOld,yOld;
+	int xNew,yNew;
 	int estado;
 	int vidas;
 	char cor;
@@ -100,8 +110,10 @@ void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac,c
 
 void movimentacao(WINDOW *janelaJogo, WINDOW *janelaScore, int *xIsaac,int *yIsaac, char** mapa);
 
-void geraInimigo(WINDOW *janelaJogo, char** mapa, char **cores);
+void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]);
 
-void inicInimigo(morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]);
+void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]);
+
+void tela_menu (WINDOW *window);
 
 #endif

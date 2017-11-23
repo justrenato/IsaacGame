@@ -17,7 +17,6 @@ int main(int argc, char *argv[]) {
   	gato_t gatoVet[MAXINIMIGOS];
   	abelha_t abelhaVet[MAXINIMIGOS];
 	
-	inicInimigo(morcegoVet,gatoVet,abelhaVet);
 
 	/*#################################### INICIALIZAÇÕES PARA NCURSES ####################################*/
 	initscr(); //iniciar ncurses
@@ -40,8 +39,12 @@ int main(int argc, char *argv[]) {
 
 	
 	/*#################################### IMPRESSÕES PRÉ JOGO ####################################*/
+	
+  	tela_menu(janelaJogo);
+	wclear(janelaJogo);
 	mapa = lerMapa(mapa,mapaArq1);
 	cores = inicCores(cores);
+	inicInimigo(janelaScore,morcegoVet,gatoVet,abelhaVet);
 
 	desenharBordas(janelaScore);
 	desenharBordas(janelaJogo);
@@ -55,6 +58,7 @@ int main(int argc, char *argv[]) {
 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
+		geraInimigo(janelaJogo, mapa,cores,morcegoVet,gatoVet,abelhaVet);
 	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores);
 	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
