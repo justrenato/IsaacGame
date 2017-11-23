@@ -12,7 +12,12 @@ int main(int argc, char *argv[]) {
 	srand(time(NULL)); //gerar semente para aleatorio
   	long int clock=0;
   	tiro_t tiros[MAXTIROS];
-  	inimigo_t inimigos[MAXINIMIGOS];
+
+  	morcego_t morcegoVet[MAXINIMIGOS];
+  	gato_t gatoVet[MAXINIMIGOS];
+  	abelha_t abelhaVet[MAXINIMIGOS];
+	
+	inicInimigo(morcegoVet,gatoVet,abelhaVet);
 
 	/*#################################### INICIALIZAÇÕES PARA NCURSES ####################################*/
 	initscr(); //iniciar ncurses
@@ -50,7 +55,7 @@ int main(int argc, char *argv[]) {
 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
-	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores,inimigos);
+	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores);
 	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 

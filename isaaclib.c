@@ -257,7 +257,7 @@ void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaa
    	}
 }
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores, inimigo_t inimigos[]){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores){
 	int click=0;
 	getmouse(event);
     int d;
@@ -316,7 +316,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	
 	if (click==2 && numtiros < 10) //se clickar e nao houverem 10 tiros ja
 	{
-		geraInimigo(janelaJogo, mapa,cores,inimigos);
+		geraInimigo(janelaJogo, mapa,cores);
 		beep();
 		flash();
 
@@ -485,154 +485,236 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 	}
 }
 
-void inic
-void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, inimigo_t inimigos[]){
+void inicInimigo(morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]){
+	for (int i = 0; i < MAXINIMIGOS; ++i) //inicializa nas structs dos tres inimigos as variaveis
+	{
+		morcegoVet[i].vidas = 3;
+		morcegoVet[i].cor = 'm';
+		morcegoVet[i].corpo[0]='/';
+		morcegoVet[i].corpo[1]='\\';
+		morcegoVet[i].corpo[2]='/';
+		morcegoVet[i].corpo[3]='\\';
+		morcegoVet[i].corpo[4]='(';
+		morcegoVet[i].corpo[5]='o';
+		morcegoVet[i].corpo[6]='_';
+		morcegoVet[i].corpo[7]='o';
+		morcegoVet[i].corpo[8]=')';
+		morcegoVet[i].corpo[9]='/';
+		morcegoVet[i].corpo[10]='\\';
+		morcegoVet[i].corpo[11]='/';
+		morcegoVet[i].corpo[12]='\\';
+
+		gatoVet[i].vidas = 3;
+		gatoVet[i].cor = 'g';
+		gatoVet[i].corpo[0][0]=' ';
+		gatoVet[i].corpo[0][1]='/';
+		gatoVet[i].corpo[0][2]='\\';
+		gatoVet[i].corpo[0][3]='_';
+		gatoVet[i].corpo[0][4]='/';
+		gatoVet[i].corpo[0][5]='\\';	
+		gatoVet[i].corpo[0][6]=' ';	
+
+		gatoVet[i].corpo[1][0]='(';
+		gatoVet[i].corpo[1][1]=' ';
+		gatoVet[i].corpo[1][2]='o';
+		gatoVet[i].corpo[1][3]='.';
+		gatoVet[i].corpo[1][4]='o';				
+		gatoVet[i].corpo[1][5]=' ';				
+		gatoVet[i].corpo[1][6]=')';
+
+		gatoVet[i].corpo[2][0]=' ';
+		gatoVet[i].corpo[2][1]='>';
+		gatoVet[i].corpo[2][2]=' ';
+		gatoVet[i].corpo[2][3]='^';
+		gatoVet[i].corpo[2][4]=' ';
+		gatoVet[i].corpo[2][5]='<';	
+		gatoVet[i].corpo[2][6]=' ';	
+
+
+		abelhaVet[i].vidas = 3;
+		abelhaVet[i].cor = 'a';
+
+		abelhaVet[i].corpo[0][0]=' ';
+		abelhaVet[i].corpo[0][1]=' ';
+		abelhaVet[i].corpo[0][2]=' ';
+		abelhaVet[i].corpo[0][3]='_';
+		abelhaVet[i].corpo[0][4]='_';				
+		abelhaVet[i].corpo[0][5]=' ';				
+		abelhaVet[i].corpo[0][6]=' ';
+
+		abelhaVet[i].corpo[1][0]=' ';
+		abelhaVet[i].corpo[1][1]='_';
+		abelhaVet[i].corpo[1][2]='/';
+		abelhaVet[i].corpo[1][3]='_';
+		abelhaVet[i].corpo[1][4]='_';				
+		abelhaVet[i].corpo[1][5]=')';				
+		abelhaVet[i].corpo[1][6]=' ';
+
+		abelhaVet[i].corpo[2][0]='(';
+		abelhaVet[i].corpo[2][1]='8';
+		abelhaVet[i].corpo[2][2]='|';
+		abelhaVet[i].corpo[2][3]=')';
+		abelhaVet[i].corpo[2][4]='_';				
+		abelhaVet[i].corpo[2][5]='}';				
+		abelhaVet[i].corpo[2][6]='}';
+
+		abelhaVet[i].corpo[3][0]=' ';
+		abelhaVet[i].corpo[3][1]='`';
+		abelhaVet[i].corpo[3][2]='\\';
+		abelhaVet[i].corpo[3][3]='_';
+		abelhaVet[i].corpo[3][4]='_';				
+		abelhaVet[i].corpo[3][5]=')';				
+		abelhaVet[i].corpo[3][6]=' ';
+	}
+}
+
+void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores){
 	int i=0,j=0,inimigo=0;
 	i = (rand()% (LINMAX -4 -yMapa()))+1;
 	j = (rand()% (COLMAX - xMapa()))+1;
 	inimigo = rand()% 3;
 	
-	// switch (inimigo) 
-	// {
-	// 	case 0://morceguineo
-	// 		mapa[i][j+1]='/';
-	// 		mapa[i][j+2]='\\';
-	// 		mapa[i][j+3]='/';
-	// 		mapa[i][j+4]='\\';
-	// 		mapa[i][j+5]='(';
-	// 		mapa[i][j+6]='o';
-	// 		mapa[i][j+7]='_';
-	// 		mapa[i][j+8]='o';
-	// 		mapa[i][j+9]=')';
-	// 		mapa[i][j+10]='/';
-	// 		mapa[i][j+11]='\\';
-	// 		mapa[i][j+12]='/';
-	// 		mapa[i][j+13]='\\';
+	switch (inimigo) 
+	{
+		case 0://morceguineo
+			mapa[i][j+1]='/';
+			mapa[i][j+2]='\\';
+			mapa[i][j+3]='/';
+			mapa[i][j+4]='\\';
+			mapa[i][j+5]='(';
+			mapa[i][j+6]='o';
+			mapa[i][j+7]='_';
+			mapa[i][j+8]='o';
+			mapa[i][j+9]=')';
+			mapa[i][j+10]='/';
+			mapa[i][j+11]='\\';
+			mapa[i][j+12]='/';
+			mapa[i][j+13]='\\';
 
-	// 		/*COR*/
-	// 		cores[i][j+1]='m';
-	// 		cores[i][j+2]='m';
-	// 		cores[i][j+3]='m';
-	// 		cores[i][j+4]='m';
-	// 		cores[i][j+5]='m';
-	// 		cores[i][j+6]='m';
-	// 		cores[i][j+7]='m';
-	// 		cores[i][j+8]='m';
-	// 		cores[i][j+9]='m';
-	// 		cores[i][j+10]='m';
-	// 		cores[i][j+11]='m';
-	// 		cores[i][j+12]='m';
-	// 		cores[i][j+13]='m';
-	// 	break;
-	// 	case 1://gatineo
-	// 		mapa[i][j+1]='/';
-	// 		mapa[i][j+2]='\\';
-	// 		mapa[i][j+3]='_';
-	// 		mapa[i][j+4]='/';
-	// 		mapa[i][j+5]='\\';	
+			/*COR*/
+			cores[i][j+1]='m';
+			cores[i][j+2]='m';
+			cores[i][j+3]='m';
+			cores[i][j+4]='m';
+			cores[i][j+5]='m';
+			cores[i][j+6]='m';
+			cores[i][j+7]='m';
+			cores[i][j+8]='m';
+			cores[i][j+9]='m';
+			cores[i][j+10]='m';
+			cores[i][j+11]='m';
+			cores[i][j+12]='m';
+			cores[i][j+13]='m';
+		break;
+		case 1://gatineo
+			mapa[i][j+1]='/';
+			mapa[i][j+2]='\\';
+			mapa[i][j+3]='_';
+			mapa[i][j+4]='/';
+			mapa[i][j+5]='\\';	
 
-	// 		mapa[i+1][j]='(';
-	// 		mapa[i+1][j+1]=' ';
-	// 		mapa[i+1][j+2]='o';
-	// 		mapa[i+1][j+3]='.';
-	// 		mapa[i+1][j+4]='o';				
-	// 		mapa[i+1][j+5]=' ';				
-	// 		mapa[i+1][j+6]=')';
+			mapa[i+1][j]='(';
+			mapa[i+1][j+1]=' ';
+			mapa[i+1][j+2]='o';
+			mapa[i+1][j+3]='.';
+			mapa[i+1][j+4]='o';				
+			mapa[i+1][j+5]=' ';				
+			mapa[i+1][j+6]=')';
 
-	// 		mapa[i+2][j+1]='>';
-	// 		mapa[i+2][j+2]=' ';
-	// 		mapa[i+2][j+3]='^';
-	// 		mapa[i+2][j+4]=' ';
-	// 		mapa[i+2][j+5]='<';	
+			mapa[i+2][j+1]='>';
+			mapa[i+2][j+2]=' ';
+			mapa[i+2][j+3]='^';
+			mapa[i+2][j+4]=' ';
+			mapa[i+2][j+5]='<';	
 
-	// 		/*COR*/
-	// 		cores[i][j+1]='b';
-	// 		cores[i][j+2]='b';
-	// 		cores[i][j+3]='b';
-	// 		cores[i][j+4]='b';
-	// 		cores[i][j+5]='b';	
+			/*COR*/
+			cores[i][j+1]='g';
+			cores[i][j+2]='g';
+			cores[i][j+3]='g';
+			cores[i][j+4]='g';
+			cores[i][j+5]='g';	
 
-	// 		cores[i+1][j]='b';
-	// 		cores[i+1][j+1]='b';
-	// 		cores[i+1][j+2]='b';
-	// 		cores[i+1][j+3]='b';
-	// 		cores[i+1][j+4]='b';				
-	// 		cores[i+1][j+5]='b';				
-	// 		cores[i+1][j+6]='b';
+			cores[i+1][j]='g';
+			cores[i+1][j+1]='g';
+			cores[i+1][j+2]='g';
+			cores[i+1][j+3]='g';
+			cores[i+1][j+4]='g';				
+			cores[i+1][j+5]='g';				
+			cores[i+1][j+6]='g';
 
-	// 		cores[i+2][j+1]='b';
-	// 		cores[i+2][j+2]='b';
-	// 		cores[i+2][j+3]='b';
-	// 		cores[i+2][j+4]='b';
-	// 		cores[i+2][j+5]='b';				
-	// 	break;
-	// 	case 2://abelinea
-	// 		mapa[i][j]=' ';
-	// 		mapa[i][j+1]=' ';
-	// 		mapa[i][j+2]=' ';
-	// 		mapa[i][j+3]='_';
-	// 		mapa[i][j+4]='_';				
-	// 		mapa[i][j+5]=' ';				
-	// 		mapa[i][j+6]=' ';
+			cores[i+2][j+1]='g';
+			cores[i+2][j+2]='g';
+			cores[i+2][j+3]='g';
+			cores[i+2][j+4]='g';
+			cores[i+2][j+5]='g';				
+		break;
+		case 2://abelinea
+			mapa[i][j]=' ';
+			mapa[i][j+1]=' ';
+			mapa[i][j+2]=' ';
+			mapa[i][j+3]='_';
+			mapa[i][j+4]='_';				
+			mapa[i][j+5]=' ';				
+			mapa[i][j+6]=' ';
 
-	// 		mapa[i+1][j]=' ';
-	// 		mapa[i+1][j+1]='_';
-	// 		mapa[i+1][j+2]='/';
-	// 		mapa[i+1][j+3]='_';
-	// 		mapa[i+1][j+4]='_';				
-	// 		mapa[i+1][j+5]=')';				
-	// 		mapa[i+1][j+6]=' ';
+			mapa[i+1][j]=' ';
+			mapa[i+1][j+1]='_';
+			mapa[i+1][j+2]='/';
+			mapa[i+1][j+3]='_';
+			mapa[i+1][j+4]='_';				
+			mapa[i+1][j+5]=')';				
+			mapa[i+1][j+6]=' ';
 
-	// 		mapa[i+2][j]='(';
-	// 		mapa[i+2][j+1]='8';
-	// 		mapa[i+2][j+2]='|';
-	// 		mapa[i+2][j+3]=')';
-	// 		mapa[i+2][j+4]='_';				
-	// 		mapa[i+2][j+5]='}';				
-	// 		mapa[i+2][j+6]='}';
+			mapa[i+2][j]='(';
+			mapa[i+2][j+1]='8';
+			mapa[i+2][j+2]='|';
+			mapa[i+2][j+3]=')';
+			mapa[i+2][j+4]='_';				
+			mapa[i+2][j+5]='}';				
+			mapa[i+2][j+6]='}';
 
-	// 		mapa[i+3][j]=' ';
-	// 		mapa[i+3][j+1]='`';
-	// 		mapa[i+3][j+2]='\\';
-	// 		mapa[i+3][j+3]='_';
-	// 		mapa[i+3][j+4]='_';				
-	// 		mapa[i+3][j+5]=')';				
-	// 		mapa[i+3][j+6]=' ';
+			mapa[i+3][j]=' ';
+			mapa[i+3][j+1]='`';
+			mapa[i+3][j+2]='\\';
+			mapa[i+3][j+3]='_';
+			mapa[i+3][j+4]='_';				
+			mapa[i+3][j+5]=')';				
+			mapa[i+3][j+6]=' ';
 
-	// 		/*COR*/
-	// 		cores[i][j]='a';
-	// 		cores[i][j+1]='a';
-	// 		cores[i][j+2]='a';
-	// 		cores[i][j+3]='a';
-	// 		cores[i][j+4]='a';				
-	// 		cores[i][j+5]='a';				
-	// 		cores[i][j+6]='a';
+			/*COR*/
+			cores[i][j]='a';
+			cores[i][j+1]='a';
+			cores[i][j+2]='a';
+			cores[i][j+3]='a';
+			cores[i][j+4]='a';				
+			cores[i][j+5]='a';				
+			cores[i][j+6]='a';
 
-	// 		cores[i+1][j]='a';
-	// 		cores[i+1][j+1]='a';
-	// 		cores[i+1][j+2]='a';
-	// 		cores[i+1][j+3]='a';
-	// 		cores[i+1][j+4]='a';				
-	// 		cores[i+1][j+5]='a';				
-	// 		cores[i+1][j+6]='a';
+			cores[i+1][j]='a';
+			cores[i+1][j+1]='a';
+			cores[i+1][j+2]='a';
+			cores[i+1][j+3]='a';
+			cores[i+1][j+4]='a';				
+			cores[i+1][j+5]='a';				
+			cores[i+1][j+6]='a';
 
-	// 		cores[i+2][j]='a';
-	// 		cores[i+2][j+1]='a';
-	// 		cores[i+2][j+2]='a';
-	// 		cores[i+2][j+3]='a';
-	// 		cores[i+2][j+4]='a';				
-	// 		cores[i+2][j+5]='a';				
-	// 		cores[i+2][j+6]='a';
+			cores[i+2][j]='a';
+			cores[i+2][j+1]='a';
+			cores[i+2][j+2]='a';
+			cores[i+2][j+3]='a';
+			cores[i+2][j+4]='a';				
+			cores[i+2][j+5]='a';				
+			cores[i+2][j+6]='a';
 
-	// 		cores[i+3][j]='a';
-	// 		cores[i+3][j+1]='a';
-	// 		cores[i+3][j+2]='a';
-	// 		cores[i+3][j+3]='a';
-	// 		cores[i+3][j+4]='a';				
-	// 		cores[i+3][j+5]='a';				
-	// 		cores[i+3][j+6]='a';
+			cores[i+3][j]='a';
+			cores[i+3][j+1]='a';
+			cores[i+3][j+2]='a';
+			cores[i+3][j+3]='a';
+			cores[i+3][j+4]='a';				
+			cores[i+3][j+5]='a';				
+			cores[i+3][j+6]='a';
 
-	// 	break;
-	// }
+		break;
+	}
 }
 
