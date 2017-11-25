@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 
 		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa);
-		geraInimigo(janelaJogo, mapa,cores,morcegoVet,gatoVet,abelhaVet);
+		geraInimigo(janelaJogo, mapa,cores,morcegoVet,gatoVet,abelhaVet,clock);
 	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores);
 	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
 

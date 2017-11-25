@@ -642,14 +642,148 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 			break;
 		}
 	}
-	
 	mvwprintw(janelaScore,1,1,"numAbelhas:%d ab1: y%d x%d, ab2: y%d x%d, ab3: y%d x%d",numAbelhas, abelhaVet[0].yOld, abelhaVet[0].xOld,abelhaVet[1].yOld, abelhaVet[1].xOld,abelhaVet[2].yOld, abelhaVet[2].xOld);
 }
 
-void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]){
+void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[], int clock){
 	int rand1 =0;
 	for (int i = 0; i < MAXINIMIGOS; ++i)
 	{
+		if (clock % /*100*/10 == 0)
+		{
+			for (int i = 0; i < MAXINIMIGOS; ++i)
+			{
+				rand1 = rand()% 8;
+				switch(rand1){
+					case 0:
+						if (mapa[morcegoVet[i].yNew-1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew--;
+						}
+					break;
+					case 1:
+						if (mapa[morcegoVet[i].yNew+1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew++;
+						}
+					break;
+					case 2:
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew-1]==' ')
+						{
+							morcegoVet[i].xNew--;
+						}
+					break;
+					case 3:
+						morcegoVet[i].xNew++;
+					break;
+					case 4:
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew-1]==' ')
+						{
+							morcegoVet[i].xNew--;
+						}
+						if (mapa[morcegoVet[i].yNew-1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew--;
+						}
+					break;
+					case 5:
+						morcegoVet[i].xNew++;
+						if (mapa[morcegoVet[i].yNew+1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew++;
+						}
+					break;
+					case 6:
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew-1]==' ')
+						{
+							morcegoVet[i].xNew--;
+						}
+						if (mapa[morcegoVet[i].yNew+1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew++;
+						}
+					break;
+					case 7:
+						morcegoVet[i].xNew++;
+						if (mapa[morcegoVet[i].yNew-1][morcegoVet[i].xNew]==' ')
+						{
+							morcegoVet[i].yNew--;
+						}
+					break;
+				}
+			}
+
+			// for (int i = 0; i < MAXINIMIGOS; ++i)
+			// {
+			// 	rand1 = rand()% 8;
+			// 	switch(rand1){
+			// 		case 0:
+			// 			gatoVet[i].yNew--;
+			// 		break;
+			// 		case 1:
+			// 			gatoVet[i].yNew++;
+			// 		break;
+			// 		case 2:
+			// 			gatoVet[i].xNew--;
+			// 		break;
+			// 		case 3:
+			// 			gatoVet[i].xNew++;
+			// 		break;
+			// 		case 4:
+			// 			gatoVet[i].xNew--;
+			// 			gatoVet[i].yNew--;
+			// 		break;
+			// 		case 5:
+			// 			gatoVet[i].xNew++;
+			// 			gatoVet[i].yNew++;
+			// 		break;
+			// 		case 6:
+			// 			gatoVet[i].xNew--;
+			// 			gatoVet[i].yNew++;
+			// 		break;
+			// 		case 7:
+			// 			gatoVet[i].xNew++;
+			// 			gatoVet[i].yNew--;
+			// 		break;
+			// 	}
+			// }
+
+			// for (int i = 0; i < MAXINIMIGOS; ++i)
+			// {
+			// 	rand1 = rand()% 8;
+			// 	switch(rand1){
+			// 		case 0:
+			// 			abelhaVet[i].yNew--;
+			// 		break;
+			// 		case 1:
+			// 			abelhaVet[i].yNew++;
+			// 		break;
+			// 		case 2:
+			// 			abelhaVet[i].xNew--;
+			// 		break;
+			// 		case 3:
+			// 			abelhaVet[i].xNew++;
+			// 		break;
+			// 		case 4:
+			// 			abelhaVet[i].xNew--;
+			// 			abelhaVet[i].yNew--;
+			// 		break;
+			// 		case 5:
+			// 			abelhaVet[i].xNew++;
+			// 			abelhaVet[i].yNew++;
+			// 		break;
+			// 		case 6:
+			// 			abelhaVet[i].xNew--;
+			// 			abelhaVet[i].yNew++;
+			// 		break;
+			// 		case 7:
+			// 			abelhaVet[i].xNew++;
+			// 			abelhaVet[i].yNew--;
+			// 		break;
+			// 	}
+			// }
+		}
+
 
 		if (morcegoVet[i].estado)
 		{
@@ -887,111 +1021,6 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=abelhaVet[i].cor;
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=abelhaVet[i].cor;
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=abelhaVet[i].cor;
-		}
-	}
-
-	for (int i = 0; i < MAXINIMIGOS; ++i)
-	{
-		rand1 = rand()% 8;
-		switch(rand1){
-			case 0:
-				morcegoVet[i].yNew--;
-			break;
-			case 1:
-				morcegoVet[i].yNew++;
-			break;
-			case 2:
-				morcegoVet[i].xNew--;
-			break;
-			case 3:
-				morcegoVet[i].xNew++;
-			break;
-			case 4:
-				morcegoVet[i].xNew--;
-				morcegoVet[i].yNew--;
-			break;
-			case 5:
-				morcegoVet[i].xNew++;
-				morcegoVet[i].yNew++;
-			break;
-			case 6:
-				morcegoVet[i].xNew--;
-				morcegoVet[i].yNew++;
-			break;
-			case 7:
-				morcegoVet[i].xNew++;
-				morcegoVet[i].yNew--;
-			break;
-		}
-	}
-
-	for (int i = 0; i < MAXINIMIGOS; ++i)
-	{
-		rand1 = rand()% 8;
-		switch(rand1){
-			case 0:
-				gatoVet[i].yNew--;
-			break;
-			case 1:
-				gatoVet[i].yNew++;
-			break;
-			case 2:
-				gatoVet[i].xNew--;
-			break;
-			case 3:
-				gatoVet[i].xNew++;
-			break;
-			case 4:
-				gatoVet[i].xNew--;
-				gatoVet[i].yNew--;
-			break;
-			case 5:
-				gatoVet[i].xNew++;
-				gatoVet[i].yNew++;
-			break;
-			case 6:
-				gatoVet[i].xNew--;
-				gatoVet[i].yNew++;
-			break;
-			case 7:
-				gatoVet[i].xNew++;
-				gatoVet[i].yNew--;
-			break;
-		}
-	}
-
-	for (int i = 0; i < MAXINIMIGOS; ++i)
-	{
-		rand1 = rand()% 8;
-		switch(rand1){
-			case 0:
-				abelhaVet[i].yNew--;
-			break;
-			case 1:
-				abelhaVet[i].yNew++;
-			break;
-			case 2:
-				abelhaVet[i].xNew--;
-			break;
-			case 3:
-				abelhaVet[i].xNew++;
-			break;
-			case 4:
-				abelhaVet[i].xNew--;
-				abelhaVet[i].yNew--;
-			break;
-			case 5:
-				abelhaVet[i].xNew++;
-				abelhaVet[i].yNew++;
-			break;
-			case 6:
-				abelhaVet[i].xNew--;
-				abelhaVet[i].yNew++;
-			break;
-			case 7:
-				abelhaVet[i].xNew++;
-				abelhaVet[i].yNew--;
-			break;
 		}
 	}
 }
