@@ -23,26 +23,35 @@
 #define OFFSET_X 5
 #define OFFSET_Y  26
 
+#define colMorcego 13
+#define colGato 7
+#define colAbelha 7
+
+#define linGato 3
+#define linAbelha 4
+
+/*
+estado 0 - n atirado
+estado 1 - andando
+estado 2 - acertou
+estado 3 - limite
+
+direção 0 - cima
+direção 1 - baixo
+direção 2 - esquerda
+direção 3 - direita
+direção 4 - dir + cima
+direção 5 - dir + baixo
+direção 6 - esq + cima
+direção 7 - esq + baixo
+*/
 typedef struct tiro_t {
 	int x,y,d,estado;
-	
-	/*estado 0 - n atirado
-	  estado 1 - andando
-	  estado 2 - acertou
-	  estado 3 - limite*/
-
-	/*direção 0 - cima
-	direção 1 - baixo
-	direção 2 - esquerda
-	direção 3 - direita
-	direção 4 - dir + cima
-	direção 5 - dir + baixo
-	direção 6 - esq + cima
-	direção 7 - esq + baixo
-	*/
 } tiro_t;
 
 
+/*estado 0 - desaparece
+  estado 1 - vivo*/
 typedef struct morcego_t
 {
 	int xOld,yOld;
@@ -50,12 +59,11 @@ typedef struct morcego_t
 	int estado;
 	int vidas;
 	char cor;
-	char corpo[13];
-	/*estado 0 - desaparece
-	  estado 1 - vivo*/
-	
+	char corpo[colMorcego];
 } morcego_t;
 
+/*estado 0 - desaparece
+  estado 1 - vivo*/
 typedef struct gato_t
 {
 	int xOld,yOld;
@@ -63,12 +71,11 @@ typedef struct gato_t
 	int estado;
 	int vidas;
 	char cor;
-	char corpo[3][7];
-
-	/*estado 0 - desaparece
-	  estado 1 - vivo*/
+	char corpo[linGato][colMorcego];
 } gato_t;
 
+/*estado 0 - desaparece
+  estado 1 - vivo*/
 typedef struct abelha_t
 {
 	int xOld,yOld;
@@ -76,10 +83,7 @@ typedef struct abelha_t
 	int estado;
 	int vidas;
 	char cor;
-	char corpo[4][7];
-
-	/*estado 0 - desaparece
-	  estado 1 - vivo*/
+	char corpo[linAbelha][colAbelha];
 } abelha_t;
 
 
@@ -102,13 +106,13 @@ void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa, char **cores);
 
 void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *janelaJogo, int xIsaac, int yIsaac, char **mapa, char **cores);
 
-void apagarIsaac(int x, int y, WINDOW *janela,char** mapa);
+void apagarIsaac(int x, int y, WINDOW *janela,char** mapa, char** cores);
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char **cores);
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char **cores, int clock, morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]);
 
 void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac,char** mapa, char **cores);
 
-void movimentacao(WINDOW *janelaJogo, WINDOW *janelaScore, int *xIsaac,int *yIsaac, char** mapa);
+void movimentacao(WINDOW *janelaJogo, WINDOW *janelaScore, int *xIsaac,int *yIsaac, char** mapa, char** cores);
 
 void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]);
 

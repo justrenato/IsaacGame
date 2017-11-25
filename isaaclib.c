@@ -99,25 +99,25 @@ void imprimeMapa(char **mapa, char **cores, WINDOW *janela){
     {
     	for (int j = 0; j < COLMAX; ++j)
     	{
-    		if (cores[i][j]=='i')
+    		if (cores[i][j]=='j')
     		{
 				init_pair(1, COLOR_GREEN, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(1));
 				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
 				wattroff(janela,COLOR_PAIR(1));
-    		} else if (cores[i][j]=='a'){
+    		} else if (cores[i][j]=='g' || cores[i][j]=='h' || cores[i][j]=='i'){
 				init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(2));
 				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
 				wattroff(janela,COLOR_PAIR(2));
     		}
-    		else if(cores[i][j]=='g'){
+    		else if(cores[i][j]=='d' || cores[i][j]=='e' || cores[i][j]=='f'){
 				init_pair(3, COLOR_CYAN, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(3));
 				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
 				wattroff(janela,COLOR_PAIR(3));
     		}
-    		else if(cores[i][j]=='m'){
+    		else if(cores[i][j]=='a' || cores[i][j]=='b' || cores[i][j]=='c'){
 				init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(4));
 				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
@@ -165,26 +165,26 @@ void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa, char **cores){
 	mapa[y+3][x+3]='\\';
 
 	/*cabeça*/
-	cores[y][x]='i';
-	cores[y][x+1]='i';
-	cores[y][x+2]='i';
-	cores[y][x+3]='i';
-	cores[y][x+4]='i';
+	cores[y][x]='j';
+	cores[y][x+1]='j';
+	cores[y][x+2]='j';
+	cores[y][x+3]='j';
+	cores[y][x+4]='j';
 
 	/*braços*/
-	cores[y+1][x]='i';
-	cores[y+1][x+1]='i';
-	cores[y+1][x+2]='i';
-	cores[y+1][x+3]='i';
-	cores[y+1][x+4]='i';
+	cores[y+1][x]='j';
+	cores[y+1][x+1]='j';
+	cores[y+1][x+2]='j';
+	cores[y+1][x+3]='j';
+	cores[y+1][x+4]='j';
 
 	/*tronco*/
-	cores[y+2][x+2]='i';
+	cores[y+2][x+2]='j';
 
 	/*pernas*/
-	cores[y+3][x+1]='i';
-	cores[y+3][x+2]='i';
-	cores[y+3][x+3]='i';
+	cores[y+3][x+1]='j';
+	cores[y+3][x+2]='j';
+	cores[y+3][x+3]='j';
 }
 
 void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac, char** mapa, char **cores){
@@ -196,7 +196,7 @@ void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac, 
     wrefresh(janelaJogo);
 }
 
-void apagarIsaac(int x, int y, WINDOW *janela,char** mapa){
+void apagarIsaac(int x, int y, WINDOW *janela,char** mapa, char** cores){
 
 	/*cabeça*/
 	mapa[y][x]=' ';
@@ -219,9 +219,32 @@ void apagarIsaac(int x, int y, WINDOW *janela,char** mapa){
 	mapa[y+3][x+1]=' ';
 	mapa[y+3][x+2]=' ';
 	mapa[y+3][x+3]=' ';
+
+
+	/*cabeça*/
+	cores[y][x]=' ';
+	cores[y][x+1]=' ';
+	cores[y][x+2]=' ';
+	cores[y][x+3]=' ';
+	cores[y][x+4]=' ';
+
+	/*braços*/
+	cores[y+1][x]=' ';
+	cores[y+1][x+1]=' ';
+	cores[y+1][x+2]=' ';
+	cores[y+1][x+3]=' ';
+	cores[y+1][x+4]=' ';
+
+	/*tronco*/
+	cores[y+2][x+2]=' ';
+
+	/*pernas*/
+	cores[y+3][x+1]=' ';
+	cores[y+3][x+2]=' ';
+	cores[y+3][x+3]=' ';
 }
 
-void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaac, char** mapa){
+void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaac, char** mapa, char** cores){
 	int ch;
     ch = wgetch(janelaJogo);
 
@@ -229,35 +252,35 @@ void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaa
 	    case 'd':
 	    		if (mapa[*yIsaac][*xIsaac+5]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
 	    			(*xIsaac)++;
 	    		}
         break;
 	    case 'a':
 	    		if (mapa[*yIsaac][*xIsaac-1]==' ')
 	    		{
-	    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+	    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
 		    		(*xIsaac)--;
 	    		}
         break;
 	    case 's':
 	    		if (mapa[*yIsaac+4][*xIsaac]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
 		    		(*yIsaac)++;
 	    		}
         break;
 	    case 'w':
 	    		if (mapa[*yIsaac-1][*xIsaac]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa);
+    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
 	    			(*yIsaac)--;
 	    		}
         break;
    	}
 }
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores, int clock,morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]){
 	int click=0;
 	getmouse(event);
     int d;
@@ -362,123 +385,446 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 
 
 	/*ATUALIZAR TIROS EXISTENTES */
-
-	for (int i = 0; i < MAXTIROS; ++i)
+	if (clock % 4 == 0)
 	{
-		if (tiros[i].estado) // se estado != 0 tiro existe e precisa ser atualizado
+		for (int i = 0; i < MAXTIROS; ++i)
 		{
-			switch (tiros[i].estado){
-				case 1: //tiro 'andando'
-					switch(tiros[i].d){
-						case 0: //cima
-							if (mapa[tiros[i].y-1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y) --;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							} 
-							else { 
-								tiros[i].estado = 2;
-							}
-						break;
-						case 1: //baixo
-							if (mapa[tiros[i].y+1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y)++;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}
-							else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 2: //esq
-							if (mapa[tiros[i].y][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].x)--;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}
-							else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 3: //dir
-							if (mapa[tiros[i].y][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].x)++;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}
-							else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 4: //dir + cima
-							if (mapa[tiros[i].y-1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y)--;
-								(tiros[i].x)++;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 5: //dir + baixo
-							if (mapa[tiros[i].y+1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y)++;
-								(tiros[i].x)++;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 6: //esq + cima
-							if (mapa[tiros[i].y-1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y)--;
-								(tiros[i].x)--;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}else{
-								tiros[i].estado = 2;
-							}
-						break;
-						case 7: //esq + baixo
-							if (mapa[tiros[i].y+1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
-							{
-								mapa[tiros[i].y][tiros[i].x]=' ';
-								(tiros[i].y)++;
-								(tiros[i].x)--;
-								cores[tiros[i].y][tiros[i].x]='t';
-								mapa[tiros[i].y][tiros[i].x]=TIRO;
-							}else{
-								tiros[i].estado = 2;
-							}
-						break;
-					}
-				break;
+			if (tiros[i].estado) // se estado != 0 tiro existe e precisa ser atualizado
+			{
+				switch (tiros[i].estado){
+					case 1: //tiro 'andando'
+						switch(tiros[i].d){
+							case 0: //cima
+								if(mapa[tiros[i].y-1][tiros[i].x]==' '){
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y) --;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}
+								else tiros[i].estado = 3;
+								switch (cores[tiros[i].y-1][tiros[i].x]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 1: //baixo
+								if (mapa[tiros[i].y+1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y)++;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}
+								else tiros[i].estado = 3;
+								switch (cores[tiros[i].y+1][tiros[i].x]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 2: //esq
+								if (mapa[tiros[i].y][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].x)--;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}
+								else tiros[i].estado = 3;
+								switch (cores[tiros[i].y][tiros[i].x-1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 3: //dir
+								if (mapa[tiros[i].y][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].x)++;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}
+								else tiros[i].estado = 3;
+								switch (cores[tiros[i].y][tiros[i].x+1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 4: //dir + cima
+								if (mapa[tiros[i].y-1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y)--;
+									(tiros[i].x)++;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}else tiros[i].estado = 3;
+								switch (cores[tiros[i].y-1][tiros[i].x+1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 5: //dir + baixo
+								if (mapa[tiros[i].y+1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y)++;
+									(tiros[i].x)++;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}else tiros[i].estado = 3;
+								switch (cores[tiros[i].y+1][tiros[i].x+1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 6: //esq + cima
+								if (mapa[tiros[i].y-1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y)--;
+									(tiros[i].x)--;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}else tiros[i].estado = 3;
+								switch (cores[tiros[i].y-1][tiros[i].x-1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+							case 7: //esq + baixo
+								if (mapa[tiros[i].y+1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
+								{
+									mapa[tiros[i].y][tiros[i].x]=' ';
+									(tiros[i].y)++;
+									(tiros[i].x)--;
+									cores[tiros[i].y][tiros[i].x]='t';
+									mapa[tiros[i].y][tiros[i].x]=TIRO;
+								}else tiros[i].estado = 3;
+								switch (cores[tiros[i].y+1][tiros[i].x-1]){
+									case 'a':
+										morcegoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'b':
+										morcegoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'c':
+										morcegoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'd':
+										gatoVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'e':
+										gatoVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'f':
+										gatoVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'g':
+										abelhaVet[0].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'h':
+										abelhaVet[1].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'i':
+										abelhaVet[2].estado = 0;
+										tiros[i].estado = 2;
+									break;
+									case 'j':
+										//mata personagem
+										tiros[i].estado =2;
+									break;
+								}
+							break;
+						}
+					break;
 
-				case 2:
-					mapa[tiros[i].y][tiros[i].x]=' ';
-					tiros[i].estado = 0;
-					numtiros--;
-				break;
+					case 2:
+						mapa[tiros[i].y][tiros[i].x]=' ';
+						tiros[i].estado = 0;
+						numtiros--;
+					break;
 
-				case 3:
-					mapa[tiros[i].y][tiros[i].x]=' ';
-				break;
+					case 3:
+						mapa[tiros[i].y][tiros[i].x]=' ';
+						tiros[i].estado = 0;
+						numtiros--;
+					break;
+				}
 			}
 		}
 	}
@@ -507,7 +853,17 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 
 		morcegoVet[i].vidas = 1;
 		morcegoVet[i].estado = 0;
-		morcegoVet[i].cor = 'm';
+		switch(i){
+			case 0:
+				morcegoVet[i].cor = 'a';
+			break;
+			case 1:
+				morcegoVet[i].cor = 'b';
+			break;
+			case 2:
+				morcegoVet[i].cor = 'c';
+			break;
+		}
 		morcegoVet[i].corpo[0]='/';
 		morcegoVet[i].corpo[1]='\\';
 		morcegoVet[i].corpo[2]='/';
@@ -535,7 +891,17 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 
 		gatoVet[i].vidas = 3;
 		gatoVet[i].estado = 0;
-		gatoVet[i].cor = 'g';
+		switch(i){
+			case 0:
+				gatoVet[i].cor = 'd';
+			break;
+			case 1:
+				gatoVet[i].cor = 'e';
+			break;
+			case 2:
+				gatoVet[i].cor = 'f';
+			break;
+		}
 		gatoVet[i].corpo[0][0]=' ';
 		gatoVet[i].corpo[0][1]='/';
 		gatoVet[i].corpo[0][2]='\\';
@@ -573,7 +939,18 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 
 		abelhaVet[i].vidas = 2;
 		abelhaVet[i].estado = 0;
-		abelhaVet[i].cor = 'a';
+		
+		switch(i){
+			case 0:
+				abelhaVet[i].cor = 'g';
+			break;
+			case 1:
+				abelhaVet[i].cor = 'h';
+			break;
+			case 2:
+				abelhaVet[i].cor = 'i';
+			break;
+		}
 
 		abelhaVet[i].corpo[0][0]=' ';
 		abelhaVet[i].corpo[0][1]=' ';
@@ -649,7 +1026,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 	int rand1 =0;
 	for (int i = 0; i < MAXINIMIGOS; ++i)
 	{
-		if (clock % /*100*/10 == 0)
+		if (clock % 100 == 0)
 		{
 			for (int i = 0; i < MAXINIMIGOS; ++i)
 			{
@@ -674,7 +1051,10 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 						}
 					break;
 					case 3:
-						morcegoVet[i].xNew++;
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew+colMorcego+1]==' ')
+						{
+							morcegoVet[i].xNew++;
+						}
 					break;
 					case 4:
 						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew-1]==' ')
@@ -687,7 +1067,10 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 						}
 					break;
 					case 5:
-						morcegoVet[i].xNew++;
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew+colMorcego+1]==' ')
+						{
+							morcegoVet[i].xNew++;
+						}
 						if (mapa[morcegoVet[i].yNew+1][morcegoVet[i].xNew]==' ')
 						{
 							morcegoVet[i].yNew++;
@@ -704,7 +1087,10 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 						}
 					break;
 					case 7:
-						morcegoVet[i].xNew++;
+						if (mapa[morcegoVet[i].yNew][morcegoVet[i].xNew+colMorcego+1]==' ')
+						{
+							morcegoVet[i].xNew++;
+						}
 						if (mapa[morcegoVet[i].yNew-1][morcegoVet[i].xNew]==' ')
 						{
 							morcegoVet[i].yNew--;
@@ -713,75 +1099,147 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 				}
 			}
 
-			// for (int i = 0; i < MAXINIMIGOS; ++i)
-			// {
-			// 	rand1 = rand()% 8;
-			// 	switch(rand1){
-			// 		case 0:
-			// 			gatoVet[i].yNew--;
-			// 		break;
-			// 		case 1:
-			// 			gatoVet[i].yNew++;
-			// 		break;
-			// 		case 2:
-			// 			gatoVet[i].xNew--;
-			// 		break;
-			// 		case 3:
-			// 			gatoVet[i].xNew++;
-			// 		break;
-			// 		case 4:
-			// 			gatoVet[i].xNew--;
-			// 			gatoVet[i].yNew--;
-			// 		break;
-			// 		case 5:
-			// 			gatoVet[i].xNew++;
-			// 			gatoVet[i].yNew++;
-			// 		break;
-			// 		case 6:
-			// 			gatoVet[i].xNew--;
-			// 			gatoVet[i].yNew++;
-			// 		break;
-			// 		case 7:
-			// 			gatoVet[i].xNew++;
-			// 			gatoVet[i].yNew--;
-			// 		break;
-			// 	}
-			// }
+			for (int i = 0; i < MAXINIMIGOS; ++i)
+			{
+				rand1 = rand()% 8;
+				switch(rand1){
+					case 0:
+						if (mapa[gatoVet[i].yNew-1][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew--;
+						}
+					break;
+					case 1:
+						if (mapa[gatoVet[i].yNew+1+linGato][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew++;
+						}
+					break;
+					case 2:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew-1]==' ')
+						{
+							gatoVet[i].xNew--;
+						}
+					break;
+					case 3:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew+colGato+1]==' ')
+						{
+							gatoVet[i].xNew++;
+						}
+					break;
+					case 4:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew-1]==' ')
+						{
+							gatoVet[i].xNew--;
+						}
+						if (mapa[gatoVet[i].yNew-1][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew--;
+						}
+					break;
+					case 5:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew+colGato+1]==' ')
+						{
+							gatoVet[i].xNew++;
+						}
+						if (mapa[gatoVet[i].yNew+1+linGato][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew++;
+						}
+					break;
+					case 6:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew-1]==' ')
+						{
+							gatoVet[i].xNew--;
+						}
+						if (mapa[gatoVet[i].yNew+1+linGato][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew++;
+						}
+					break;
+					case 7:
+						if (mapa[gatoVet[i].yNew][gatoVet[i].xNew+colGato+1]==' ')
+						{
+							gatoVet[i].xNew++;
+						}
+						if (mapa[gatoVet[i].yNew-1][gatoVet[i].xNew]==' ')
+						{
+							gatoVet[i].yNew--;
+						}
+					break;
+				}
+			}
 
-			// for (int i = 0; i < MAXINIMIGOS; ++i)
-			// {
-			// 	rand1 = rand()% 8;
-			// 	switch(rand1){
-			// 		case 0:
-			// 			abelhaVet[i].yNew--;
-			// 		break;
-			// 		case 1:
-			// 			abelhaVet[i].yNew++;
-			// 		break;
-			// 		case 2:
-			// 			abelhaVet[i].xNew--;
-			// 		break;
-			// 		case 3:
-			// 			abelhaVet[i].xNew++;
-			// 		break;
-			// 		case 4:
-			// 			abelhaVet[i].xNew--;
-			// 			abelhaVet[i].yNew--;
-			// 		break;
-			// 		case 5:
-			// 			abelhaVet[i].xNew++;
-			// 			abelhaVet[i].yNew++;
-			// 		break;
-			// 		case 6:
-			// 			abelhaVet[i].xNew--;
-			// 			abelhaVet[i].yNew++;
-			// 		break;
-			// 		case 7:
-			// 			abelhaVet[i].xNew++;
-			// 			abelhaVet[i].yNew--;
-			// 		break;
-			// 	}
-			// }
+			for (int i = 0; i < MAXINIMIGOS; ++i)
+			{
+				rand1 = rand()% 8;
+				switch(rand1){
+					case 0:
+						if (mapa[abelhaVet[i].yNew-1][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew--;
+						}
+					break;
+					case 1:
+						if (mapa[abelhaVet[i].yNew+1+linAbelha][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew++;
+						}
+					break;
+					case 2:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew-1]==' ')
+						{
+							abelhaVet[i].xNew--;
+						}
+					break;
+					case 3:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew+colAbelha+1]==' ')
+						{
+							abelhaVet[i].xNew++;
+						}
+					break;
+					case 4:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew-1]==' ')
+						{
+							abelhaVet[i].xNew--;
+						}
+						if (mapa[abelhaVet[i].yNew-1][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew--;
+						}
+					break;
+					case 5:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew+colAbelha+1]==' ')
+						{
+							abelhaVet[i].xNew++;
+						}
+						if (mapa[abelhaVet[i].yNew+1+linAbelha][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew++;
+						}
+					break;
+					case 6:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew-1]==' ')
+						{
+							abelhaVet[i].xNew--;
+						}
+						if (mapa[abelhaVet[i].yNew+1+linAbelha][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew++;
+						}
+					break;
+					case 7:
+						if (mapa[abelhaVet[i].yNew][abelhaVet[i].xNew+colAbelha+1]==' ')
+						{
+							abelhaVet[i].xNew++;
+						}
+						if (mapa[abelhaVet[i].yNew-1][abelhaVet[i].xNew]==' ')
+						{
+							abelhaVet[i].yNew--;
+						}
+					break;
+				}
+			}
 		}
 
 
@@ -800,6 +1258,20 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+11]=' ';
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=' ';
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=' ';
+
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+1]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+2]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+3]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+4]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+5]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+6]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+7]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+8]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+9]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+10]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+11]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=' ';
 
 
 			morcegoVet[i].xOld=morcegoVet[i].xNew;
@@ -833,6 +1305,35 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=morcegoVet[i].cor;
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=morcegoVet[i].cor;			
 		}
+		else{
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+1]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+2]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+3]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+4]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+5]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+6]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+7]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+8]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+9]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+10]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+11]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=' ';
+			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=' ';
+
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+1]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+2]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+3]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+4]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+5]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+6]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+7]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+8]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+9]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+10]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+11]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=' ';
+			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=' ';
+		}
 
 		if (gatoVet[i].estado)
 		{
@@ -859,6 +1360,32 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+4]=' ';
 			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+5]=' ';
 			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+6]=' ';
+
+
+
+			cores[gatoVet[i].yOld][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+6]=' ';
+
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+6]=' ';
+
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+6]=' ';
 
 
 			gatoVet[i].xOld=gatoVet[i].xNew;
@@ -915,6 +1442,57 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+5]= gatoVet[i].cor;
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+6]= gatoVet[i].cor;
 		}
+		else{
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+1]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+2]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+3]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+4]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+5]=' ';
+			mapa[gatoVet[i].yOld][gatoVet[i].xOld+6]=' ';
+
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+1]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+2]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+3]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+4]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+5]=' ';
+			mapa[gatoVet[i].yOld+1][gatoVet[i].xOld+6]=' ';
+
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+1]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+2]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+3]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+4]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+5]=' ';
+			mapa[gatoVet[i].yOld+2][gatoVet[i].xOld+6]=' ';
+
+
+
+			cores[gatoVet[i].yOld][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld][gatoVet[i].xOld+6]=' ';
+
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld+1][gatoVet[i].xOld+6]=' ';
+
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+1]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+2]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+3]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+4]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+5]=' ';
+			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+6]=' ';
+		}
 
 		if (abelhaVet[i].estado)
 		{
@@ -949,6 +1527,40 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=' ';
 			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=' ';
 			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=' ';
+
+
+
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=' ';
 
 
 
@@ -1022,9 +1634,75 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=abelhaVet[i].cor;
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=abelhaVet[i].cor;
 		}
+		else{
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+1]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+2]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+3]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+4]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+5]=' ';
+			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+6]=' ';
+
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+1]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+2]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+3]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+4]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+5]=' ';
+			mapa[abelhaVet[i].yOld+1][abelhaVet[i].xOld+6]=' ';
+
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+1]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+2]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+3]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+4]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+5]=' ';
+			mapa[abelhaVet[i].yOld+2][abelhaVet[i].xOld+6]=' ';
+
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+1]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+2]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+3]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=' ';
+			mapa[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=' ';
+
+
+
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+1][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+2][abelhaVet[i].xOld+6]=' ';
+
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+1]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+2]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+3]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=' ';
+			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=' ';			
+		}
 	}
 }
-
 
 void tela_menu (WINDOW *window){
 	
