@@ -4,7 +4,7 @@ void desenharBordas(WINDOW *janela) {
   box( janela, 0, 0 ); // desenha as bordas da janela indicada
 }
 
-void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *janelaJogo, int xIsaac, int yIsaac, char **mapa, char **cores){
+void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *janelaJogo, personagem_t isaac, char **mapa, char **cores){
 	int novoX, novoY;
     getmaxyx(stdscr, novoY, novoX);
     /*teste para ver se o terminal foi redimensionado */
@@ -22,9 +22,9 @@ void teste_redimensao(int *xAtual, int *yAtual, WINDOW *janelaScore, WINDOW *jan
 
 		desenharBordas(janelaJogo);
 		desenharBordas(janelaScore);
-		infoScore(janelaScore, yIsaac, xIsaac);
+		infoScore(janelaScore, isaac);
 		imprimeMapa(mapa, cores, janelaJogo);
-		imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa, cores);
+		imprimirIsaac(isaac,janelaJogo,mapa, cores);
 	}
 }
 
@@ -103,30 +103,30 @@ void imprimeMapa(char **mapa, char **cores, WINDOW *janela){
     		{
 				init_pair(1, COLOR_GREEN, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(1));
-				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);//imprime os caracteres dos bonecos
 				wattroff(janela,COLOR_PAIR(1));
     		} else if (cores[i][j]=='g' || cores[i][j]=='h' || cores[i][j]=='i'){
 				init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(2));
-				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);//imprime os caracteres dos bonecos
 				wattroff(janela,COLOR_PAIR(2));
     		}
     		else if(cores[i][j]=='d' || cores[i][j]=='e' || cores[i][j]=='f'){
 				init_pair(3, COLOR_CYAN, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(3));
-				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);//imprime os caracteres dos bonecos
 				wattroff(janela,COLOR_PAIR(3));
     		}
     		else if(cores[i][j]=='a' || cores[i][j]=='b' || cores[i][j]=='c'){
 				init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(4));
-				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);//imprime os caracteres dos bonecos
 				wattroff(janela,COLOR_PAIR(4));
     		}
     		else if(cores[i][j]=='t'){
 				init_pair(5, COLOR_BLUE, COLOR_BLACK);
 				wattron(janela,COLOR_PAIR(5));
-				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
+				mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);//imprime os caracteres dos bonecos
 				wattroff(janela,COLOR_PAIR(5));
     		}
     		else mvwprintw(janela, yMapa()+i, xMapa()+j, "%c",mapa[i][j]);
@@ -134,153 +134,235 @@ void imprimeMapa(char **mapa, char **cores, WINDOW *janela){
     }
 }
 
-
-void infoScore(WINDOW *janela, int yIsaac, int xIsaac){
-	int xAtual, yAtual;
-	getmaxyx(stdscr, yAtual, xAtual); 
-	mvwprintw(janela, 1, 1, "Hearts:%d  Coins:00  Keys:00 | xmouse: %d ymouse: %d",55,xAtual,yAtual);
+void infoScore(WINDOW *janela, personagem_t isaac){
+	start_color();
+	int xAtual;
+	xAtual=getmaxx(stdscr);
+	init_pair(6, COLOR_RED, COLOR_BLACK);
+	mvwprintw(janela, 1, xAtual-40, "Pressione tecla 'H' para obter ajuda.",isaac.points);
+	switch(isaac.hearts){
+		case 0:
+			mvwprintw(janela, 1, (xAtual-31)/2, "GAME OVER!!!!!!!!!!!!");
+		break;
+		case 1:
+				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+				wattron(janela,COLOR_PAIR(2));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+				wattroff(janela,COLOR_PAIR(2));				
+				wattron(janela,COLOR_PAIR(6));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3");
+				wattroff(janela,COLOR_PAIR(6));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+11,"__ __");
+		break;
+		case 2:
+				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+				wattron(janela,COLOR_PAIR(2));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+				wattroff(janela,COLOR_PAIR(2));				
+				wattron(janela,COLOR_PAIR(6));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3");
+				wattroff(janela,COLOR_PAIR(6));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+14,"__");
+		break;
+		case 3:
+				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+				wattron(janela,COLOR_PAIR(2));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+				wattroff(janela,COLOR_PAIR(2));				
+				wattron(janela,COLOR_PAIR(6));
+				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3 <3");
+				wattroff(janela,COLOR_PAIR(6));
+		break;
+	}
 }
 
-void imprimirIsaac(int x, int y, WINDOW *janela,char** mapa, char **cores){
+void imprimirIsaac(personagem_t isaac, WINDOW *janela,char** mapa, char **cores){
 	/*cabeça*/
-	mapa[y][x]='(';
-	mapa[y][x+1]=';';
-	mapa[y][x+2]='_';
-	mapa[y][x+3]=';';
-	mapa[y][x+4]=')';
+	mapa[isaac.y][isaac.x]='(';
+	mapa[isaac.y][isaac.x+1]=';';
+	mapa[isaac.y][isaac.x+2]='_';
+	mapa[isaac.y][isaac.x+3]=';';
+	mapa[isaac.y][isaac.x+4]=')';
 
 	/*braços*/
-	mapa[y+1][x]='_';
-	mapa[y+1][x+1]='_';
-	mapa[y+1][x+2]='|';
-	mapa[y+1][x+3]='_';
-	mapa[y+1][x+4]='_';
+	mapa[isaac.y+1][isaac.x]='_';
+	mapa[isaac.y+1][isaac.x+1]='_';
+	mapa[isaac.y+1][isaac.x+2]='|';
+	mapa[isaac.y+1][isaac.x+3]='_';
+	mapa[isaac.y+1][isaac.x+4]='_';
 
 	/*tronco*/
-	mapa[y+2][x+2]='|';
+	mapa[isaac.y+2][isaac.x+2]='|';
 
 	/*pernas*/
-	mapa[y+3][x+1]='/';
-	mapa[y+3][x+2]=' ';
-	mapa[y+3][x+3]='\\';
+	mapa[isaac.y+3][isaac.x+1]='/';
+	mapa[isaac.y+3][isaac.x+2]=' ';
+	mapa[isaac.y+3][isaac.x+3]='\\';
 
 	/*cabeça*/
-	cores[y][x]='j';
-	cores[y][x+1]='j';
-	cores[y][x+2]='j';
-	cores[y][x+3]='j';
-	cores[y][x+4]='j';
+	cores[isaac.y][isaac.x]='j';
+	cores[isaac.y][isaac.x+1]='j';
+	cores[isaac.y][isaac.x+2]='j';
+	cores[isaac.y][isaac.x+3]='j';
+	cores[isaac.y][isaac.x+4]='j';
 
 	/*braços*/
-	cores[y+1][x]='j';
-	cores[y+1][x+1]='j';
-	cores[y+1][x+2]='j';
-	cores[y+1][x+3]='j';
-	cores[y+1][x+4]='j';
+	cores[isaac.y+1][isaac.x]='j';
+	cores[isaac.y+1][isaac.x+1]='j';
+	cores[isaac.y+1][isaac.x+2]='j';
+	cores[isaac.y+1][isaac.x+3]='j';
+	cores[isaac.y+1][isaac.x+4]='j';
 
 	/*tronco*/
-	cores[y+2][x+2]='j';
+	cores[isaac.y+2][isaac.x+2]='j';
 
 	/*pernas*/
-	cores[y+3][x+1]='j';
-	cores[y+3][x+2]='j';
-	cores[y+3][x+3]='j';
+	cores[isaac.y+3][isaac.x+1]='j';
+	cores[isaac.y+3][isaac.x+2]='j';
+	cores[isaac.y+3][isaac.x+3]='j';
 }
 
-void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, int xIsaac,int yIsaac, char** mapa, char **cores){
+void attJanelas(WINDOW *janelaJogo, WINDOW *janelaScore, personagem_t isaac, char** mapa, char **cores){
     // atualiza janelas
-    // infoScore(janelaScore, yIsaac, xIsaac);
+    infoScore(janelaScore, isaac);
 	imprimeMapa(mapa, cores, janelaJogo);
-	imprimirIsaac(xIsaac,yIsaac,janelaJogo,mapa, cores);
+	imprimirIsaac(isaac,janelaJogo,mapa, cores);
     wrefresh(janelaScore);
     wrefresh(janelaJogo);
 }
 
-void apagarIsaac(int x, int y, WINDOW *janela,char** mapa, char** cores){
+void apagarIsaac(personagem_t isaac, WINDOW *janela,char** mapa, char** cores){
 
 	/*cabeça*/
-	mapa[y][x]=' ';
-	mapa[y][x+1]=' ';
-	mapa[y][x+2]=' ';
-	mapa[y][x+3]=' ';
-	mapa[y][x+4]=' ';
+	mapa[isaac.y][isaac.x]=' ';
+	mapa[isaac.y][isaac.x+1]=' ';
+	mapa[isaac.y][isaac.x+2]=' ';
+	mapa[isaac.y][isaac.x+3]=' ';
+	mapa[isaac.y][isaac.x+4]=' ';
 
 	/*braços*/
-	mapa[y+1][x]=' ';
-	mapa[y+1][x+1]=' ';
-	mapa[y+1][x+2]=' ';
-	mapa[y+1][x+3]=' ';
-	mapa[y+1][x+4]=' ';
+	mapa[isaac.y+1][isaac.x]=' ';
+	mapa[isaac.y+1][isaac.x+1]=' ';
+	mapa[isaac.y+1][isaac.x+2]=' ';
+	mapa[isaac.y+1][isaac.x+3]=' ';
+	mapa[isaac.y+1][isaac.x+4]=' ';
 
 	/*tronco*/
-	mapa[y+2][x+2]=' ';
+	mapa[isaac.y+2][isaac.x+2]=' ';
 
 	/*pernas*/
-	mapa[y+3][x+1]=' ';
-	mapa[y+3][x+2]=' ';
-	mapa[y+3][x+3]=' ';
+	mapa[isaac.y+3][isaac.x+1]=' ';
+	mapa[isaac.y+3][isaac.x+2]=' ';
+	mapa[isaac.y+3][isaac.x+3]=' ';
 
 
 	/*cabeça*/
-	cores[y][x]=' ';
-	cores[y][x+1]=' ';
-	cores[y][x+2]=' ';
-	cores[y][x+3]=' ';
-	cores[y][x+4]=' ';
+	cores[isaac.y][isaac.x]=' ';
+	cores[isaac.y][isaac.x+1]=' ';
+	cores[isaac.y][isaac.x+2]=' ';
+	cores[isaac.y][isaac.x+3]=' ';
+	cores[isaac.y][isaac.x+4]=' ';
 
 	/*braços*/
-	cores[y+1][x]=' ';
-	cores[y+1][x+1]=' ';
-	cores[y+1][x+2]=' ';
-	cores[y+1][x+3]=' ';
-	cores[y+1][x+4]=' ';
+	cores[isaac.y+1][isaac.x]=' ';
+	cores[isaac.y+1][isaac.x+1]=' ';
+	cores[isaac.y+1][isaac.x+2]=' ';
+	cores[isaac.y+1][isaac.x+3]=' ';
+	cores[isaac.y+1][isaac.x+4]=' ';
 
 	/*tronco*/
-	cores[y+2][x+2]=' ';
+	cores[isaac.y+2][isaac.x+2]=' ';
 
 	/*pernas*/
-	cores[y+3][x+1]=' ';
-	cores[y+3][x+2]=' ';
-	cores[y+3][x+3]=' ';
+	cores[isaac.y+3][isaac.x+1]=' ';
+	cores[isaac.y+3][isaac.x+2]=' ';
+	cores[isaac.y+3][isaac.x+3]=' ';
 }
 
-void movimentacao(WINDOW *janelaJogo, WINDOW*janelaScore, int *xIsaac,int *yIsaac, char** mapa, char** cores){
-	int ch;
+void lerTeclado(WINDOW *janelaJogo, WINDOW*janelaScore, personagem_t *isaac, char** mapa, char** cores, int *gameOver){
+	int ch,xMax,yMax;
     ch = wgetch(janelaJogo);
-
+    getmaxyx(janelaJogo,yMax,xMax);
     switch( ch ) {
 	    case 'd':
-	    		if (mapa[*yIsaac][*xIsaac+5]==' ')
+	    		if (mapa[(isaac->y)][(isaac->x)+5]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
-	    			(*xIsaac)++;
+    				apagarIsaac(*isaac,janelaJogo,mapa,cores);
+	    			((isaac->x))++;
 	    		}
         break;
 	    case 'a':
-	    		if (mapa[*yIsaac][*xIsaac-1]==' ')
+	    		if (mapa[(isaac->y)][(isaac->x)-1]==' ')
 	    		{
-	    			apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
-		    		(*xIsaac)--;
+	    			apagarIsaac(*isaac,janelaJogo,mapa,cores);
+		    		((isaac->x))--;
 	    		}
         break;
 	    case 's':
-	    		if (mapa[*yIsaac+4][*xIsaac]==' ')
+	    		if (mapa[(isaac->y)+4][(isaac->x)]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
-		    		(*yIsaac)++;
+    				apagarIsaac(*isaac,janelaJogo,mapa,cores);
+		    		((isaac->y))++;
 	    		}
         break;
 	    case 'w':
-	    		if (mapa[*yIsaac-1][*xIsaac]==' ')
+	    		if (mapa[(isaac->y)-1][(isaac->x)]==' ')
 	    		{
-    				apagarIsaac(*xIsaac,*yIsaac,janelaJogo,mapa,cores);
-	    			(*yIsaac)--;
+    				apagarIsaac(*isaac,janelaJogo,mapa,cores);
+	    			((isaac->y))--;
 	    		}
+        break;
+	    case 'h':
+  			printf("\033[?1003l\n"); // Disable mouse movement events, as l = low
+			nodelay (janelaJogo, FALSE) ; 
+			wclear(janelaJogo);
+			desenharBordas(janelaJogo);
+			desenharBordas(janelaScore);
+
+			mvwprintw(janelaJogo, ((yMax-30)/2)+0, (xMax-140)/2,  "############################################################################################################################################");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+1, (xMax-140)/2,  "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+2, (xMax-140)/2,  "#                                                 TELA DE AJUDA                                                                            #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+3, (xMax-140)/2,  "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+4, (xMax-140)/2,  "#          CONTROLES:                                   |    DICA:                                                                         #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+5, (xMax-140)/2,  "#                                                       |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+6, (xMax-140)/2,  "#               W ~> Anda para cima                     |      Mate todos os inimigos para conseguir pontuações maiores.                 #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+7, (xMax-140)/2,  "#               S ~> Anda para baixo                    |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+8, (xMax-140)/2,  "#               A ~> Anda para esquerda                 |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+9, (xMax-140)/2,  "#               D ~> Anda para direita                  |           /\\_/\\                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+10, (xMax-140)/2, "#                                                       |          ( o.o )       ~> Gatinho 10 pontos                                      #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+11, (xMax-140)/2, "#                                                       |           > ^ <                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+12, (xMax-140)/2, "#               Mouse ~> Atira                          |             __                                                                   #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+13, (xMax-140)/2, "#                                                       |           _/__)                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+14, (xMax-140)/2, "#                                                       |          (8|)_}}       ~> Abelha 15 pontos                                       #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+15, (xMax-140)/2, "#                                                       |           `\\__)                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+16, (xMax-140)/2, "#                                                       |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+17, (xMax-140)/2, "#                                                       |        /\\/\\(o_o)/\\/\\   ~> Morcego 20 pontos                                      #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+18, (xMax-140)/2, "#                                                       |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+19, (xMax-140)/2, "#                                                       |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+20, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+21, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+22, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+23, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+24, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+25, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+26, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+27, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+28, (xMax-140)/2, "#                                                                          Pressione qualquer tecla para continuar e 'Q' para sair do jogo #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+29, (xMax-140)/2, "############################################################################################################################################");
+   			ch = wgetch(janelaJogo);
+
+   			if (ch == 'q' || ch == 'Q')
+   			{
+				*gameOver=1;
+   			}
+			nodelay (janelaJogo,TRUE) ; 
+  			printf("\033[?1003h\n"); // Disable mouse movement events, as l = low
+			wclear(janelaJogo);
         break;
    	}
 }
 
-void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int yIsaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores, int clock,morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]){
+void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *isaac, int *oldMouseX, int *oldMouseY,char** mapa, tiro_t tiros[], char**cores, int clock,morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[]){
 	int click=0;
 	getmouse(event);
     int d;
@@ -292,52 +374,50 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 		*oldMouseY = event->y- yMapa()-3;
 		click = event->bstate; //se click==2 botao esquerdo pressionado.
 	}
-	// mvwprintw(janelaScore, 1, 50, "                                                                                                            ");
-	mvwprintw(janelaScore, 1, 80, "ymouse: %03d xmouse: %03d | yIsaac: %03d xIsaac: %03d -- numtiros.y: %d ",*oldMouseY,*oldMouseX,yIsaac,xIsaac,tiros[numtiros].y);
 
 	/*##############TESTANDO A POSIÇÂO DO MOUSE PARA DETERMINAR DIREÇÃO CASO SEJA ATIRADO*##############*/
-	if ((*oldMouseY <= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
+	if ((*oldMouseY <= isaac->y ) && (*oldMouseX >= isaac->x - 20) && (*oldMouseX <= isaac->x+20))
 	{
 		d=0;
 	}
 
-	if ((*oldMouseY >= yIsaac ) && (*oldMouseX >= xIsaac - 20) && (*oldMouseX <= xIsaac+20))
+	if ((*oldMouseY >= isaac->y ) && (*oldMouseX >= isaac->x - 20) && (*oldMouseX <= isaac->x+20))
 	{
 		d=1;
 	}
 
-	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX <= xIsaac))
+	if ((*oldMouseY >= isaac->y -10 ) && (*oldMouseY <= isaac->y + 10) && (*oldMouseX <= isaac->x))
 	{
 		d=2;
 	}
 	
-	if ((*oldMouseY >= yIsaac -10 ) && (*oldMouseY <= yIsaac + 10) && (*oldMouseX >= xIsaac))
+	if ((*oldMouseY >= isaac->y -10 ) && (*oldMouseY <= isaac->y + 10) && (*oldMouseX >= isaac->x))
 	{
 		d=3;
 	}
 
-	if((*oldMouseY <= yIsaac - 10) && (*oldMouseX >= xIsaac + 20)){
+	if((*oldMouseY <= isaac->y - 10) && (*oldMouseX >= isaac->x + 20)){
 		d=4;
 	}
 
-	if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX >= xIsaac + 20))
+	if ((*oldMouseY >= isaac->y + 10) && (*oldMouseX >= isaac->x + 20))
 	{
 		d=5;
 	}
 
-	if ((*oldMouseY <= yIsaac - 10) &&  (*oldMouseX <= xIsaac -20))
+	if ((*oldMouseY <= isaac->y - 10) &&  (*oldMouseX <= isaac->x -20))
 	{
 		d=6;
 	}
 
 
-	if ((*oldMouseY >= yIsaac + 10) && (*oldMouseX <= xIsaac - 20))
+	if ((*oldMouseY >= isaac->y + 10) && (*oldMouseX <= isaac->x - 20))
 	{
 		d=7;
 	}
-/*################################################################################################*/
+	/*################################################################################################*/
 	
-	if (click==2 && numtiros < 10) //se clickar e nao houverem 10 tiros ja
+	if (click==2 < 10) //se clickar e nao houverem 10 tiros ja
 	{
 		beep();
 		flash();
@@ -345,42 +425,61 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
 		switch(d){
 			case 0:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac+2;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x+2;
 			break;
 			case 1:
-				tiros[numtiros].y = yIsaac+2;
-				tiros[numtiros].x = xIsaac+2;
+				tiros[numtiros].y = isaac->y+2;
+				tiros[numtiros].x = isaac->x+2;
 			break;
 			case 2:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x;
 			break;
 			case 3:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac+4;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x+4;
 			break;
 			case 4:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac+4;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x+4;
 			break;
 			case 5:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac+4;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x+4;
 			break;
 			case 6:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x;
 			break;
 			case 7:
-				tiros[numtiros].y = yIsaac;
-				tiros[numtiros].x = xIsaac;
+				tiros[numtiros].y = isaac->y;
+				tiros[numtiros].x = isaac->x;
 			break;
 		}
 
 		tiros[numtiros].d = d; //atribui direção atual do mouse à direção do tiro
 		numtiros++; // aumenta o contador de tiros
-	
+	}
+
+
+	/*tiro inimigo*/
+	if (clock % 500 == 0 && morcegoVet[0].estado) //se clickar e nao houverem 10 tiros ja
+	{
+		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+
+		if (isaac->x >= morcegoVet[0].xOld)
+		{
+			tiros[numtiros].x = morcegoVet[0].xOld+14;
+			tiros[numtiros].y = morcegoVet[0].yOld;
+			tiros[numtiros].d = 3; //atribui direção atual do mouse à direção do tiro
+		}
+		else{
+			tiros[numtiros].d = 2;
+			tiros[numtiros].x = morcegoVet[0].xOld+1;
+			tiros[numtiros].y = morcegoVet[0].yOld;
+		}
+		numtiros++; // aumenta o contador de tiros
 	}
 
 
@@ -404,44 +503,54 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 								else tiros[i].estado = 3;
 								switch (cores[tiros[i].y-1][tiros[i].x]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -453,47 +562,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
 								}
-								else tiros[i].estado = 3;
+								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -505,47 +624,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
 								}
-								else tiros[i].estado = 3;
+								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -558,47 +687,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
 								}
-								else tiros[i].estado = 3;
+								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -610,47 +749,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									(tiros[i].x)++;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
-								}else tiros[i].estado = 3;
+								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y-1][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -662,47 +811,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									(tiros[i].x)++;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
-								}else tiros[i].estado = 3;
+								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -714,47 +873,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									(tiros[i].x)--;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
-								}else tiros[i].estado = 3;
+								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y-1][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -766,47 +935,57 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event,int xIsaac,int 
 									(tiros[i].x)--;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
-								}else tiros[i].estado = 3;
+								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 0;
+										morcegoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'b':
-										morcegoVet[1].estado = 0;
+										morcegoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'c':
-										morcegoVet[2].estado = 0;
+										morcegoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=20;
 									break;
 									case 'd':
-										gatoVet[0].estado = 0;
+										gatoVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'e':
-										gatoVet[1].estado = 0;
+										gatoVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'f':
-										gatoVet[2].estado = 0;
+										gatoVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=10;
 									break;
 									case 'g':
-										abelhaVet[0].estado = 0;
+										abelhaVet[0].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'h':
-										abelhaVet[1].estado = 0;
+										abelhaVet[1].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'i':
-										abelhaVet[2].estado = 0;
+										abelhaVet[2].estado = 2;
 										tiros[i].estado = 2;
+										isaac->points +=15;
 									break;
 									case 'j':
 										//mata personagem
 										tiros[i].estado =2;
+										isaac->hearts--;
 									break;
 								}
 							break;
@@ -842,8 +1021,8 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 	for (int i = 0; i < MAXINIMIGOS; ++i) //inicializa nas structs dos tres inimigos as variaveis
 	{
 
-		int yM = (rand()% (LINMAX -4 -yMapa()))+1;
-		int xM = (rand()% (COLMAX - xMapa()))+1;
+		int yM = (rand()% (LINMAX -4 -yMapa()-2))+1;
+		int xM = (rand()% (COLMAX - xMapa()-colMorcego))+1;
 
 		morcegoVet[i].yOld = yM;
 		morcegoVet[i].xOld = xM;
@@ -882,7 +1061,7 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 	for (int i = 0; i < MAXINIMIGOS; ++i)
 	{
 		int yG = (rand()% (LINMAX -4 -yMapa()))+1;
-		int xG = (rand()% (COLMAX - xMapa()))+1;
+		int xG = (rand()% (COLMAX - xMapa()-colGato))+1;
 		gatoVet[i].yOld = yG;
 		gatoVet[i].xOld = xG;
 
@@ -930,7 +1109,7 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 	for (int i = 0; i < MAXINIMIGOS; ++i)
 	{
 		int yA = (rand()% (LINMAX -4 -yMapa()))+1;
-		int xA = (rand()% (COLMAX - xMapa()))+1;
+		int xA = (rand()% (COLMAX - xMapa()-colAbelha))+1;
 		abelhaVet[i].yOld = yA;
 		abelhaVet[i].xOld = xA;
 
@@ -1019,14 +1198,18 @@ void inicInimigo(WINDOW *janelaScore,morcego_t morcegoVet[], gato_t gatoVet[], a
 			break;
 		}
 	}
-	mvwprintw(janelaScore,1,1,"numAbelhas:%d ab1: y%d x%d, ab2: y%d x%d, ab3: y%d x%d",numAbelhas, abelhaVet[0].yOld, abelhaVet[0].xOld,abelhaVet[1].yOld, abelhaVet[1].xOld,abelhaVet[2].yOld, abelhaVet[2].xOld);
 }
 
 void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morcegoVet[], gato_t gatoVet[], abelha_t abelhaVet[], int clock){
 	int rand1 =0;
+	int delay =100;
+	if (delay>0)
+	{
+		delay--;
+	}
 	for (int i = 0; i < MAXINIMIGOS; ++i)
 	{
-		if (clock % 100 == 0)
+		if (clock % delay == 0)
 		{
 			for (int i = 0; i < MAXINIMIGOS; ++i)
 			{
@@ -1243,7 +1426,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 		}
 
 
-		if (morcegoVet[i].estado)
+		if (morcegoVet[i].estado==1)
 		{
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+1]=' ';
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+2]=' ';
@@ -1305,7 +1488,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=morcegoVet[i].cor;
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=morcegoVet[i].cor;			
 		}
-		else{
+		if (morcegoVet[i].estado==2){
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+1]=' ';
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+2]=' ';
 			mapa[morcegoVet[i].yOld][morcegoVet[i].xOld+3]=' ';
@@ -1333,9 +1516,11 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+11]=' ';
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+12]=' ';
 			cores[morcegoVet[i].yOld][morcegoVet[i].xOld+13]=' ';
+
+			morcegoVet[i].estado=0; //muda para o estado 0 para nao ficar printando espaços em branco após a morte do inimigo
 		}
 
-		if (gatoVet[i].estado)
+		if (gatoVet[i].estado==1)
 		{
 			mapa[gatoVet[i].yOld][gatoVet[i].xOld]=' ';
 			mapa[gatoVet[i].yOld][gatoVet[i].xOld+1]=' ';
@@ -1442,7 +1627,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+5]= gatoVet[i].cor;
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+6]= gatoVet[i].cor;
 		}
-		else{
+		if (gatoVet[i].estado==2){
 			mapa[gatoVet[i].yOld][gatoVet[i].xOld]=' ';
 			mapa[gatoVet[i].yOld][gatoVet[i].xOld+1]=' ';
 			mapa[gatoVet[i].yOld][gatoVet[i].xOld+2]=' ';
@@ -1492,9 +1677,12 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+4]=' ';
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+5]=' ';
 			cores[gatoVet[i].yOld+2][gatoVet[i].xOld+6]=' ';
+
+			gatoVet[i].estado=0; //muda para o estado 0 para nao ficar printando espaços em branco após a morte do inimigo
+
 		}
 
-		if (abelhaVet[i].estado)
+		if (abelhaVet[i].estado==1)
 		{
 			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld]=' ';
 			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+1]=' ';
@@ -1634,7 +1822,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=abelhaVet[i].cor;
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=abelhaVet[i].cor;
 		}
-		else{
+		if (abelhaVet[i].estado==2){
 			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld]=' ';
 			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+1]=' ';
 			mapa[abelhaVet[i].yOld][abelhaVet[i].xOld+2]=' ';
@@ -1700,62 +1888,91 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+4]=' ';
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+5]=' ';
 			cores[abelhaVet[i].yOld+3][abelhaVet[i].xOld+6]=' ';			
+
+			abelhaVet[i].estado=0; //muda para o estado 0 para nao ficar printando espaços em branco após a morte do inimigo
 		}
 	}
 }
 
-void tela_menu (WINDOW *window){
-	
- //    char list[5][7] = { "ISAAC" };
- //    char item[7];
- //    int i = 0;
-
- //    char c = 'c';
-
- 
- //    initscr(); // initialize Ncurses
- //    window = newwin( LOGIN_BOX_HEIGHT,LOGIN_BOX_WIDHT ,OFFSET_X , OFFSET_Y); // create a new window
- //    box( window, 0, 0 ); // sets default borders for the window
+void tela_menu (){
+    char list[5][7] = { "ISAAC" };
+    char item[7];
+    int i = 0;
+    char c = 'c';
+    int yMax, xMax;
+    getmaxyx(stdscr,yMax,xMax);
+	start_color();
+    WINDOW *window = newwin( yMax/3,xMax/4 ,yMax/3 ,xMax/3); // create a new window
+    box( window, 0, 0 ); // sets default borders for the window
      
-	// // now print all the menu items and highlight the first one
-	// mvwprintw(window,1, 8, "THE BINDING OF ISAAC");
- //    for( i=0; i<2; i++ ) {
- //        if( i == 0 ) 
- //            wattron( window, A_STANDOUT ); // highlights the first item.
- //        else
- //            wattroff( window, A_STANDOUT );
- //        sprintf(item, "%-5s",  list[i]);
- //        mvwprintw( window,3, 11 + (7 * i), "%s", item );
- //    }
- //    printf("\n");
- //    mvwprintw(window,11,  1, "HP");
- // 	mvwprintw(window,12, 1, "Strength");
- // 	mvwprintw(window,13, 1, "Speed");
- // 	mvwprintw(window,14, 1, "Luck");
+	// now print all the menu items and highlight the first one
+	wattron( window, A_BOLD ); // highlights the first item.
+	mvwprintw(window,1, 8, "THE BINDING OF ISAAC");
+    for( i=0; i<2; i++ ) {
+        if( i == 0 ) 
+            wattron( window, A_STANDOUT ); // highlights the first item.
+        else
+            wattroff( window,A_STANDOUT);
+        sprintf(item, "%-5s",  list[i]);
+        mvwprintw( window,3, 11 + (7 * i), "%s", item );
+    }
+    printf("\n");
+    mvwprintw(window,11,  1, "HP");
+ 	mvwprintw(window,12, 1, "Strength");
+ 	mvwprintw(window,13, 1, "Speed");
+ 	mvwprintw(window,14, 1, "Luck");
 
 
- //    mvwprintw(window,4, 11, "     ");
- //  	mvwprintw(window,5, 11, "     ");
- // 	mvwprintw(window,6, 11, "(;_;)");
- // 	mvwprintw(window,7, 11, "__|__");
- // 	mvwprintw(window,8, 11, "  |  ");
- // 	mvwprintw(window,9, 11, " / \\ ");
+    mvwprintw(window,4, 11, "     ");
+  	mvwprintw(window,5, 11, "     ");
+ 	mvwprintw(window,6, 11, "(;_;)");
+ 	mvwprintw(window,7, 11, "__|__");
+ 	mvwprintw(window,8, 11, "  |  ");
+ 	mvwprintw(window,9, 11, " / \\ ");
 
- // 	mvwprintw(window,11,  12, "6");
- // 	mvwprintw(window,12, 12, "3.5");
- // 	mvwprintw(window,13, 12, "1.0");
- // 	mvwprintw(window,14, 12, "0");
- //    wrefresh( window ); // update the terminal screen
+ 	mvwprintw(window,11,  12, "3");
+ 	mvwprintw(window,12, 12, "3.5");
+ 	mvwprintw(window,13, 12, "1.0");
+ 	mvwprintw(window,14, 12, "0");
+    wrefresh( window ); // update the terminal screen
  
- //    noecho(); // disable echoing of characters on the screen
- //    keypad( window, TRUE ); // enable keyboard input for the window.
- //    curs_set(0); // hide the default screen cursor.
+    noecho(); // disable echoing of characters on the screen
+    keypad( window, TRUE ); // enable keyboard input for the window.
+    curs_set(0); // hide the default screen cursor.
     
      
- //    while(c  == 'c'){
- //    	c = getchar();
+    while(c  == 'c'){
+    	c = getchar();
 
- //    }
+    }
  	
- //    delwin( window);
+    delwin( window);
+}
+
+void contPontos(int clock, personagem_t *isaac){
+	if (clock % 300 == 0)
+	{
+		isaac->points++;
+	}
+}
+
+void salvarPontos(personagem_t isaac){
+	FILE *pontuacao = fopen("SCORE_ISAAC.txt","a");
+	if (!pontuacao)
+	{
+		perror("Erro ao salvar pontuação.");
+	}
+
+  	time_t rawtime;
+	struct tm * timeinfo;
+
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+
+
+
+	fprintf(pontuacao, "################# %02d/%02d/%d - %02d:%02d:%02d ##################\n",timeinfo->tm_mday,timeinfo->tm_mon+1,timeinfo->tm_year+1900,timeinfo->tm_hour,timeinfo->tm_min,timeinfo->tm_sec);
+	fprintf(pontuacao, "#\tVIDAS: %d                                             #\n",isaac.hearts );
+	fprintf(pontuacao, "#\tPONTUAÇÃO: %04ld                                      #\n",isaac.points );
+	fprintf(pontuacao, "##########################################################\n\n");
 }

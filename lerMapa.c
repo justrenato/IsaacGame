@@ -1,16 +1,25 @@
 #include "defs.h"
 
-int main(int argc, char *argv[]) {
+int main(){
 	/*#################################### INICIALIZAÇÕES PARA VARIAVEIS ####################################*/
-	int xIsaac=90,yIsaac=20; // coordenadas Isaac
+	personagem_t isaac;
+	isaac.x=90; // coordenadas Isaac
+	isaac.y=20;
+	isaac.hearts = 3;
+	isaac.points = -1;
+
 	int gameOver = 0; 
 	int xAtual, yAtual; //dimensões janela
+
 	int oldMouseX=1, oldMouseY=1;
 	char *mapaArq1 = "map.h";
 	char **mapa = NULL; //matriz que sera o mapa
 	char **cores = NULL; //matriz de cores
+	
 	srand(time(NULL)); //gerar semente para aleatorio
+  	
   	long int clock=0;
+	
   	tiro_t tiros[MAXTIROS];
 
   	morcego_t morcegoVet[MAXINIMIGOS];
@@ -34,39 +43,40 @@ int main(int argc, char *argv[]) {
   	MEVENT event; //struct que guarda os eventos do mouse
 
  	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
-  	printf("\033[?1003h\n"); // Makes the terminal report mouse movement events
   	mouseinterval(0.1);
 
-	
 	/*#################################### IMPRESSÕES PRÉ JOGO ####################################*/
 	
-  	tela_menu(janelaJogo);
 	wclear(janelaJogo);
 	mapa = lerMapa(mapa,mapaArq1);
 	cores = inicCores(cores);
 	inicInimigo(janelaScore,morcegoVet,gatoVet,abelhaVet);
+  	tela_menu();
 
 	desenharBordas(janelaScore);
 	desenharBordas(janelaJogo);
-	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
+	attJanelas(janelaJogo, janelaScore, isaac,mapa, cores);
 	
 	/*####################################  INICIO JOGO ####################################*/
+  	printf("\033[?1003h\n"); // Makes the terminal report mouse movement events
 	while(!gameOver){
     
-		teste_redimensao(&xAtual, &yAtual, janelaScore, janelaJogo, xIsaac, yIsaac, mapa, cores);
+		teste_redimensao(&xAtual, &yAtual, janelaScore, janelaJogo, isaac, mapa, cores);
 		
-		attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
-
-		movimentacao(janelaJogo, janelaScore, &xIsaac, &yIsaac, mapa, cores);
+		attJanelas(janelaJogo, janelaScore, isaac,mapa, cores);
+		contPontos(clock,&isaac);
+		lerTeclado(janelaJogo, janelaScore, &isaac, mapa, cores, &gameOver);
 		geraInimigo(janelaJogo, mapa,cores,morcegoVet,gatoVet,abelhaVet,clock);
-	    tiro(janelaJogo, janelaScore, &event,xIsaac,yIsaac,&oldMouseX,&oldMouseY,mapa,tiros,cores,clock,morcegoVet,gatoVet,abelhaVet);
-	   	attJanelas(janelaJogo, janelaScore, xIsaac, yIsaac,mapa, cores);
+	    tiro(janelaJogo, janelaScore, &event,&isaac,&oldMouseX,&oldMouseY,mapa,tiros,cores,clock,morcegoVet,gatoVet,abelhaVet);
+	   	attJanelas(janelaJogo, janelaScore, isaac,mapa, cores);
 
 
 	   	usleep(DELAY);
 	   	clock++;
 	}
 
+	printf("\033[?1003l\n"); // Disable mouse movement events, as l = low
 	endwin();
+	salvarPontos(isaac);
 	return 0;
 }
