@@ -135,45 +135,48 @@ void imprimeMapa(char **mapa, char **cores, WINDOW *janela){
 }
 
 void infoScore(WINDOW *janela, personagem_t isaac){
-	start_color();
-	int xAtual;
-	xAtual=getmaxx(stdscr);
-	init_pair(6, COLOR_RED, COLOR_BLACK);
-	mvwprintw(janela, 1, xAtual-40, "Pressione tecla 'H' para obter ajuda.",isaac.points);
-	switch(isaac.hearts){
-		case 0:
-			mvwprintw(janela, 1, (xAtual-31)/2, "GAME OVER!!!!!!!!!!!!");
-		break;
-		case 1:
-				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
-				wattron(janela,COLOR_PAIR(2));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
-				wattroff(janela,COLOR_PAIR(2));				
-				wattron(janela,COLOR_PAIR(6));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3");
-				wattroff(janela,COLOR_PAIR(6));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+11,"__ __");
-		break;
-		case 2:
-				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
-				wattron(janela,COLOR_PAIR(2));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
-				wattroff(janela,COLOR_PAIR(2));				
-				wattron(janela,COLOR_PAIR(6));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3");
-				wattroff(janela,COLOR_PAIR(6));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+14,"__");
-		break;
-		case 3:
-				mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
-				wattron(janela,COLOR_PAIR(2));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
-				wattroff(janela,COLOR_PAIR(2));				
-				wattron(janela,COLOR_PAIR(6));
-				mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3 <3");
-				wattroff(janela,COLOR_PAIR(6));
-		break;
-	}
+	// start_color();
+	// int xAtual;
+	// xAtual=getmaxx(stdscr);
+	// init_pair(6, COLOR_RED, COLOR_BLACK);
+	// mvwprintw(janela, 1, xAtual-40, "Pressione tecla 'H' para obter ajuda.",isaac.points);
+	// switch(isaac.hearts){
+	// 	case 0:
+	// 		/*GAME OVER AQUI*/
+	// 		// wclear(janela);
+	// 		// box(janela,0,0);
+	// 		// mvwprintw(janela, 1, (xAtual-31)/2, "GAME OVER!!!!!!!!!!!!");
+	// 	break;
+	// 	case 1:
+	// 			mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+	// 			wattron(janela,COLOR_PAIR(2));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+	// 			wattroff(janela,COLOR_PAIR(2));				
+	// 			wattron(janela,COLOR_PAIR(6));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3");
+	// 			wattroff(janela,COLOR_PAIR(6));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+11,"__ __");
+	// 	break;
+	// 	case 2:
+	// 			mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+	// 			wattron(janela,COLOR_PAIR(2));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+	// 			wattroff(janela,COLOR_PAIR(2));				
+	// 			wattron(janela,COLOR_PAIR(6));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3");
+	// 			wattroff(janela,COLOR_PAIR(6));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+14,"__");
+	// 	break;
+	// 	case 3:
+	// 			mvwprintw(janela, 1, (xAtual-31)/2, "Hearts:           Points:",isaac.points);
+	// 			wattron(janela,COLOR_PAIR(2));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+25, "%04d",isaac.points);
+	// 			wattroff(janela,COLOR_PAIR(2));				
+	// 			wattron(janela,COLOR_PAIR(6));
+	// 			mvwprintw(janela, 1, ((xAtual-31)/2)+8, "<3 <3 <3");
+	// 			wattroff(janela,COLOR_PAIR(6));
+	// 	break;
+	// }
 }
 
 void imprimirIsaac(personagem_t isaac, WINDOW *janela,char** mapa, char **cores){
@@ -330,12 +333,12 @@ void lerTeclado(WINDOW *janelaJogo, WINDOW*janelaScore, personagem_t *isaac, cha
 			mvwprintw(janelaJogo, ((yMax-30)/2)+8, (xMax-140)/2,  "#               A ~> Anda para esquerda                 |                                                                                  #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+9, (xMax-140)/2,  "#               D ~> Anda para direita                  |           /\\_/\\                                                                  #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+10, (xMax-140)/2, "#                                                       |          ( o.o )       ~> Gatinho 10 pontos                                      #");
-			mvwprintw(janelaJogo, ((yMax-30)/2)+11, (xMax-140)/2, "#                                                       |           > ^ <                                                                  #");
-			mvwprintw(janelaJogo, ((yMax-30)/2)+12, (xMax-140)/2, "#               Mouse ~> Atira                          |             __                                                                   #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+11, (xMax-140)/2, "#               Mouse ~> Atira                          |           > ^ <                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+12, (xMax-140)/2, "#           ______________________________              |             __                                                                   #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+13, (xMax-140)/2, "#                                                       |           _/__)                                                                  #");
-			mvwprintw(janelaJogo, ((yMax-30)/2)+14, (xMax-140)/2, "#                                                       |          (8|)_}}       ~> Abelha 15 pontos                                       #");
-			mvwprintw(janelaJogo, ((yMax-30)/2)+15, (xMax-140)/2, "#                                                       |           `\\__)                                                                  #");
-			mvwprintw(janelaJogo, ((yMax-30)/2)+16, (xMax-140)/2, "#                                                       |                                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+14, (xMax-140)/2, "#              Ao final do jogo abra o arquivo          |          (8|)_}}       ~> Abelha 15 pontos                                       #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+15, (xMax-140)/2, "#              SCORE_ISAAC.txt para acessar infos       |           `\\__)                                                                  #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+16, (xMax-140)/2, "#              sobre sua pontuação ^~^                |                                                                                  #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+17, (xMax-140)/2, "#                                                       |        /\\/\\(o_o)/\\/\\   ~> Morcego 20 pontos                                      #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+18, (xMax-140)/2, "#                                                       |                                                                                  #");
 			mvwprintw(janelaJogo, ((yMax-30)/2)+19, (xMax-140)/2, "#                                                       |                                                                                  #");
@@ -417,12 +420,12 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 	}
 	/*################################################################################################*/
 	
-	if (click==2 < 10) //se clickar e nao houverem 10 tiros ja
+	if ((click==2) && (numtiros< MAXTIROS)) //se clickar e nao houverem 10 tiros ja
 	{
 		beep();
-		flash();
 
 		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+		tiros[numtiros].origem = 1; //mudo origem para 1 (tiro do personagem)
 		switch(d){
 			case 0:
 				tiros[numtiros].y = isaac->y;
@@ -463,30 +466,78 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 	}
 
 
-	/*tiro inimigo*/
-	if (clock % 500 == 0 && morcegoVet[0].estado) //se clickar e nao houverem 10 tiros ja
-	{
-		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+	/*######### TIRO INIMIGO #########*/
+	// int control;
+	// for (int i = 0; i < MAXINIMIGOS; ++i)
+	// {
+	// 	control = (rand()% 500)+300;
+	// 	if (clock % control == 0 && morcegoVet[i].estado) //se clickar e nao houverem 10 tiros ja
+	// 	{
+	// 		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+	// 		tiros[numtiros].origem = 0; //mudo origem para 0 (tiro do inimigo)
 
-		if (isaac->x >= morcegoVet[0].xOld)
-		{
-			tiros[numtiros].x = morcegoVet[0].xOld+14;
-			tiros[numtiros].y = morcegoVet[0].yOld;
-			tiros[numtiros].d = 3; //atribui direção atual do mouse à direção do tiro
-		}
-		else{
-			tiros[numtiros].d = 2;
-			tiros[numtiros].x = morcegoVet[0].xOld+1;
-			tiros[numtiros].y = morcegoVet[0].yOld;
-		}
-		numtiros++; // aumenta o contador de tiros
-	}
+	// 		if (isaac->x >= morcegoVet[i].xOld)
+	// 		{
+	// 			tiros[numtiros].x = morcegoVet[i].xOld+14;
+	// 			tiros[numtiros].y = morcegoVet[i].yOld;
+	// 			tiros[numtiros].d = 3; //atribui direção atual do mouse à direção do tiro
+	// 		}
+	// 		else{
+	// 			tiros[numtiros].d = 2;
+	// 			tiros[numtiros].x = morcegoVet[i].xOld+1;
+	// 			tiros[numtiros].y = morcegoVet[i].yOld;
+	// 		}
+	// 		numtiros++; // aumenta o contador de tiros
+	// 	}
+
+
+	// 	control = (rand()% 500)+300;
+	// 	if (clock % control == 0 && gatoVet[i].estado) //se clickar e nao houverem 10 tiros ja
+	// 	{
+	// 		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+	// 		tiros[numtiros].origem = 0; //mudo origem para 0 (tiro do inimigo)
+
+	// 		if (isaac->x >= gatoVet[i].xOld)
+	// 		{
+	// 			tiros[numtiros].x = gatoVet[i].xOld+14;
+	// 			tiros[numtiros].y = gatoVet[i].yOld;
+	// 			tiros[numtiros].d = 3; //atribui direção atual do mouse à direção do tiro
+	// 		}
+	// 		else{
+	// 			tiros[numtiros].d = 2;
+	// 			tiros[numtiros].x = gatoVet[i].xOld+1;
+	// 			tiros[numtiros].y = gatoVet[i].yOld;
+	// 		}
+	// 		numtiros++; // aumenta o contador de tiros
+	// 	}
+
+	// 	control = (rand()% 500)+300;
+	// 	if (clock % control == 0 && abelhaVet[i].estado) //se clickar e nao houverem 10 tiros ja
+	// 	{
+	// 		tiros[numtiros].estado = 1; //mudo estado para 1 (tiro andando)
+	// 		tiros[numtiros].origem = 0; //mudo origem para 0 (tiro do inimigo)
+
+	// 		if (isaac->x >= abelhaVet[i].xOld)
+	// 		{
+	// 			tiros[numtiros].x = abelhaVet[i].xOld+14;
+	// 			tiros[numtiros].y = abelhaVet[i].yOld;
+	// 			tiros[numtiros].d = 3; //atribui direção atual do mouse à direção do tiro
+	// 		}
+	// 		else{
+	// 			tiros[numtiros].d = 2;
+	// 			tiros[numtiros].x = abelhaVet[i].xOld+1;
+	// 			tiros[numtiros].y = abelhaVet[i].yOld;
+	// 		}
+	// 		numtiros++; // aumenta o contador de tiros
+	// 	}
+	// }
+	/*######### TIRO INIMIGO #########*/
 
 
 	/*ATUALIZAR TIROS EXISTENTES */
 	if (clock % 4 == 0)
 	{
-		for (int i = 0; i < MAXTIROS; ++i)
+		for (int i = 0; i < numtiros; ++i)
 		{
 			if (tiros[i].estado) // se estado != 0 tiro existe e precisa ser atualizado
 			{
@@ -494,63 +545,95 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 					case 1: //tiro 'andando'
 						switch(tiros[i].d){
 							case 0: //cima
-								if(mapa[tiros[i].y-1][tiros[i].x]==' '){
+								if (mapa[tiros[i].y-1][tiros[i].x]==' '){
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y) --;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
 								}
 								else tiros[i].estado = 3;
+
 								switch (cores[tiros[i].y-1][tiros[i].x]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -558,6 +641,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y+1][tiros[i].x]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y)++;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
@@ -565,54 +649,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -620,6 +734,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].x)--;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
@@ -627,54 +742,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -683,6 +828,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								{
 									
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].x)++;
 									cores[tiros[i].y][tiros[i].x]='t';
 									mapa[tiros[i].y][tiros[i].x]=TIRO;
@@ -690,54 +836,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								else tiros[i].estado = 2;
 								switch (cores[tiros[i].y][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -745,6 +921,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y-1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y)--;
 									(tiros[i].x)++;
 									cores[tiros[i].y][tiros[i].x]='t';
@@ -752,54 +929,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y-1][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -807,6 +1014,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y+1][tiros[i].x+1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y)++;
 									(tiros[i].x)++;
 									cores[tiros[i].y][tiros[i].x]='t';
@@ -814,54 +1022,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x+1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -869,6 +1107,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y-1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y)--;
 									(tiros[i].x)--;
 									cores[tiros[i].y][tiros[i].x]='t';
@@ -876,54 +1115,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y-1][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -931,6 +1200,7 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								if (mapa[tiros[i].y+1][tiros[i].x-1]==' ') //testando se o proximo lugar que ira imprimir o tiro é um espaço em branco, se nao for o tiro some.
 								{
 									mapa[tiros[i].y][tiros[i].x]=' ';
+									cores[tiros[i].y][tiros[i].x]=' ';
 									(tiros[i].y)++;
 									(tiros[i].x)--;
 									cores[tiros[i].y][tiros[i].x]='t';
@@ -938,54 +1208,84 @@ void tiro(WINDOW *janelaJogo, WINDOW *janelaScore, MEVENT *event, personagem_t *
 								}else tiros[i].estado = 2;
 								switch (cores[tiros[i].y+1][tiros[i].x-1]){
 									case 'a':
-										morcegoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'b':
-										morcegoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'c':
-										morcegoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=20;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											morcegoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=20;
+										}
 									break;
 									case 'd':
-										gatoVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'e':
-										gatoVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'f':
-										gatoVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=10;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											gatoVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=10;
+										}
 									break;
 									case 'g':
-										abelhaVet[0].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[0].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'h':
-										abelhaVet[1].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[1].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'i':
-										abelhaVet[2].estado = 2;
-										tiros[i].estado = 2;
-										isaac->points +=15;
+										if (tiros[i].origem)//se o tiro vier do personagem
+										{
+											abelhaVet[2].estado = 2;
+											tiros[i].estado = 2;
+											isaac->points +=15;
+										}
 									break;
 									case 'j':
-										//mata personagem
-										tiros[i].estado =2;
-										isaac->hearts--;
+										if (!tiros[i].origem)//se o tiro vier do inimigo
+										{
+											//mata personagem
+											tiros[i].estado =2;
+											isaac->hearts--;
+										}
 									break;
 								}
 							break;
@@ -1949,10 +2249,59 @@ void tela_menu (){
     delwin( window);
 }
 
-void contPontos(int clock, personagem_t *isaac){
+void contPontosVidas(int clock, personagem_t *isaac, int *gameOver,WINDOW *janelaJogo, WINDOW* janelaScore){
+	int xMax,yMax;
+	getmaxyx(janelaJogo,yMax,xMax);
 	if (clock % 300 == 0)
 	{
 		isaac->points++;
+	}
+	if (isaac->hearts<1)
+	{
+		printf("\033[?1003l\n"); // Disable mouse movement events, as l = low
+		wclear(janelaJogo);
+		wclear(janelaScore);
+		desenharBordas(janelaJogo);
+		desenharBordas(janelaScore);
+
+
+		nodelay (janelaJogo, TRUE) ; 
+		int c;
+   		while (c!='q' && c!='Q'){
+			mvwprintw(janelaJogo, ((yMax-30)/2)+0, (xMax-140)/2,  "############################################################################################################################################");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+1, (xMax-140)/2,  "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+2, (xMax-140)/2,  "#                        /$$$$$$   /$$$$$$  /$$      /$$ /$$$$$$$$        /$$$$$$  /$$    /$$ /$$$$$$$$ /$$$$$$$                           #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+3, (xMax-140)/2,  "#                       /$$__  $$ /$$__  $$| $$$    /$$$| $$_____/       /$$__  $$| $$   | $$| $$_____/| $$__  $$                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+4, (xMax-140)/2,  "#                      | $$  \\__/| $$  \\ $$| $$$$  /$$$$| $$            | $$  \\ $$| $$   | $$| $$      | $$  \\ $$                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+5, (xMax-140)/2,  "#                      | $$ /$$$$| $$$$$$$$| $$ $$/$$ $$| $$$$$         | $$  | $$|  $$ / $$/| $$$$$   | $$$$$$$/                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+6, (xMax-140)/2,  "#                      | $$|_  $$| $$__  $$| $$  $$$| $$| $$__/         | $$  | $$ \\  $$ $$/ | $$__/   | $$__  $$                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+7, (xMax-140)/2,  "#                      | $$  \\ $$| $$  | $$| $$\\  $ | $$| $$            | $$  | $$  \\  $$$/  | $$      | $$  \\ $$                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+8, (xMax-140)/2,  "#                      |  $$$$$$/| $$  | $$| $$ \\/  | $$| $$$$$$$$      |  $$$$$$/   \\  $/   | $$$$$$$$| $$  | $$                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+9, (xMax-140)/2,  "#                       \\______/ |__/  |__/|__/     |__/|________/       \\______/     \\_/    |________/|__/  |__/                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+10, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+11, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+12, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+13, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+14, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+15, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+16, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+17, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+18, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+19, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+20, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+21, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+22, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+23, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+24, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+25, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+26, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+27, (xMax-140)/2, "#                                                                                                                                          #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+28, (xMax-140)/2, "#                                                                                                          Pressione 'q' para sair do jogo #");
+			mvwprintw(janelaJogo, ((yMax-30)/2)+29, (xMax-140)/2, "############################################################################################################################################");
+
+	   		c = wgetch(janelaJogo);
+   		}
+		*gameOver=1;
 	}
 }
 
@@ -1968,8 +2317,6 @@ void salvarPontos(personagem_t isaac){
 
 	time ( &rawtime );
 	timeinfo = localtime ( &rawtime );
-
-
 
 	fprintf(pontuacao, "################# %02d/%02d/%d - %02d:%02d:%02d ##################\n",timeinfo->tm_mday,timeinfo->tm_mon+1,timeinfo->tm_year+1900,timeinfo->tm_hour,timeinfo->tm_min,timeinfo->tm_sec);
 	fprintf(pontuacao, "#\tVIDAS: %d                                             #\n",isaac.hearts );

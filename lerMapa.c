@@ -64,7 +64,7 @@ int main(){
 		teste_redimensao(&xAtual, &yAtual, janelaScore, janelaJogo, isaac, mapa, cores);
 		
 		attJanelas(janelaJogo, janelaScore, isaac,mapa, cores);
-		contPontos(clock,&isaac);
+		contPontosVidas(clock,&isaac,&gameOver,janelaJogo,janelaScore);
 		lerTeclado(janelaJogo, janelaScore, &isaac, mapa, cores, &gameOver);
 		geraInimigo(janelaJogo, mapa,cores,morcegoVet,gatoVet,abelhaVet,clock);
 	    tiro(janelaJogo, janelaScore, &event,&isaac,&oldMouseX,&oldMouseY,mapa,tiros,cores,clock,morcegoVet,gatoVet,abelhaVet);

@@ -13,7 +13,7 @@
 #define ALT_SCORE 3
 #define DELAY 1000
 #define TIRO '0'
-#define MAXTIROS 10
+#define MAXTIROS 100
 #define MAXINIMIGOS 3 //maximo 3 inimigos de cada
 #define TOTALINIMIGOS MAXINIMIGOS*2 //maximo de inimigos que estarão em jogo ao mesmo tempo 
 
@@ -45,9 +45,12 @@ direção 4 - dir + cima
 direção 5 - dir + baixo
 direção 6 - esq + cima
 direção 7 - esq + baixo
+
+origem 0 - inimigo
+origem 1 - personagem
 */
 typedef struct tiro_t {
-	int x,y,d,estado;
+	int x,y,d,estado,origem;
 } tiro_t;
 
 
@@ -124,7 +127,7 @@ void geraInimigo(WINDOW *janelaJogo, char** mapa, char** cores, morcego_t morceg
 
 void tela_menu ();
 
-void contPontos(int clock, personagem_t *isaac);
+void contPontosVidas(int clock, personagem_t *isaac, int *gameOver,WINDOW *janelaJogo, WINDOW *janelaScore);
 
 void salvarPontos(personagem_t isaac);
 
